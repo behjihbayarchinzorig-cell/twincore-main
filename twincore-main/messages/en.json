@@ -1,0 +1,747 @@
+{
+  "meta": {
+    "title": "TwinCore — Digital twin platform",
+    "description": "TwinCore — a digital twin platform for buildings, from planning to sales"
+  },
+  "nav": {
+    "home": "Home",
+    "system": "System",
+    "contact": "Contact",
+    "login": "Log in",
+    "menu": {
+      "modules": "Modules",
+      "stages": "Stages and structure",
+      "workspace": "Workspace",
+      "workspaceName": "Construction control →"
+    },
+    "products": {
+      "label": "Products",
+      "system": {
+        "title": "Complete system",
+        "sub": "Plan → Construction → Ready-to-Use Smart Platform",
+        "steps": {
+          "plan": [
+            "Plan",
+            "",
+            "Base data, site planning, master plan"
+          ],
+          "build": [
+            "Construction",
+            "",
+            "Schedule, progress, finance, quality control"
+          ],
+          "ready": [
+            "Ready-to-use smart platform",
+            "",
+            "Digital twin, live monitoring, operations"
+          ]
+        }
+      },
+      "data": {
+        "title": "Complete database",
+        "items": {
+          "gis": [
+            "GIS",
+            "Map, zones, streets, utility networks"
+          ],
+          "bim": [
+            "BIM",
+            "Building information model"
+          ],
+          "aerial": [
+            "Aerial Survey",
+            "Drone survey: orthophoto, DSM, DTM"
+          ],
+          "finance": [
+            "Financial Planning",
+            "Budget, cost, funding"
+          ]
+        }
+      },
+      "tracked": {
+        "title": "What the system is tracking",
+        "note": "Demo project · current records",
+        "stats": {
+          "buildings": "Buildings",
+          "workers": "Workers",
+          "machines": "Machines and plant",
+          "budget": "Budget"
+        },
+        "budgetUnit": "billion ₮",
+        "workspace": "Workspace"
+      }
+    },
+    "account": "My account",
+    "workspace": "Workspace",
+    "logout": "Log out",
+    "dev": "Dev panel"
+  },
+  "lang": {
+    "label": "Change language — Монгол"
+  },
+  "home": {
+    "title": "See the city before you build it",
+    "lead": "Construction and infrastructure projects, from planning to sales, on one digital twin.",
+    "cta": "Explore the system",
+    "hint": "Drag to turn it. Click inside, then scroll to zoom.",
+    "sample": "Sample building, sample data.",
+    "play": "Play the stages",
+    "more": "Learn more",
+    "stageText": {
+      "design": "The master plan: roads, the river and its park, housing, schools, kindergartens, shops and bus stops, planned in one place.",
+      "build": "Roads and bridges go in first, then the district rises package by package. Trees and green space come last.",
+      "operate": "The district comes alive: lights on, cars and buses moving, people walking in the parks and courtyards — all run from one board."
+    },
+    "pause": "Pause",
+    "stages": {
+      "design": "Planning",
+      "build": "Construction process",
+      "operate": "Platform",
+      "sell": "Sales"
+    },
+    "eyebrow": "TwinCore · City digital twin platform",
+    "designSteps": {
+      "site": "Site selection",
+      "bim": "BIM model",
+      "finance": "Financials"
+    },
+    "finance": {
+      "title": "Financial case",
+      "bn": "bn ₮",
+      "m2": "m²",
+      "homes": "homes",
+      "land": "Land",
+      "build": "Construction cost",
+      "soft": "Design and permits",
+      "vat": "VAT (10%)",
+      "total": "Total investment",
+      "value": "Market value",
+      "profit": "Net profit",
+      "roi": "Return (ROI)",
+      "rate": "At about ₮{r} to US$1"
+    },
+    "district": {
+      "pkg": "Package {n}",
+      "sample": "Sample district — figures worked out from the model",
+      "area": "Area",
+      "ha": "{n} ha",
+      "buildings": "Residential buildings",
+      "green": "Green space",
+      "schools": "Schools, kindergartens",
+      "stops": "Bus stops",
+      "legend": {
+        "housing": "Housing",
+        "shops": "Shops, services",
+        "school": "Schools",
+        "park": "Green space",
+        "stop": "Bus stops",
+        "built": "Built",
+        "crane": "Package under way",
+        "bus": "Buses",
+        "people": "People"
+      },
+      "time": "Time",
+      "weather": {
+        "sunny": "Sunny",
+        "rainy": "Rainy",
+        "snowy": "Snowy"
+      },
+      "keys": "Drag to pan · right-drag to rotate · WASD",
+      "speed": "Speed",
+      "clock": "Clock",
+      "film": {
+        "0": "Chingeltei, the Selbe valley — the real terrain and the city around it.",
+        "1": "The master plan is laid on the site; every parcel is marked by its use.",
+        "2": "Streets go in first: pavements, pedestrian crossings and street lights.",
+        "3": "Each package is built in turn: tower crane, frame, then the façade.",
+        "4": "Offices and shops along the main avenue; housing and courtyards behind.",
+        "5": "Schools, kindergartens, green zones and the river park.",
+        "6": "The district comes alive: buses, cars and people, all by the lights.",
+        "7": "Now pick the time and the weather yourself, and drag the map around."
+      }
+    },
+    "live": {
+      "label": "Live",
+      "city": "Ulaanbaatar",
+      "kind": {
+        "clear": "Clear",
+        "cloudy": "Cloudy",
+        "fog": "Fog",
+        "rain": "Rain",
+        "snow": "Snow",
+        "storm": "Thunderstorm"
+      },
+      "note": "The background shows Ulaanbaatar’s time and weather right now"
+    },
+    "story": {
+      "data": "All of the city’s spatial data in one database — every object with an ID.",
+      "twin": "A 3D digital twin of the city, with analysis on it.",
+      "control": "Plan and actual progress, tracked on the map.",
+      "monitor": "Site sensor readings on the digital twin.",
+      "one": "Four parts, one platform, linked by ID.",
+      "layers": [
+        "DTM",
+        "DSM",
+        "Orthophoto",
+        "Streets",
+        "Plots"
+      ],
+      "objects": [
+        "Office",
+        "Apartments",
+        "Retail",
+        "School",
+        "New build",
+        "Parking"
+      ],
+      "names": [
+        "Spatial base data",
+        "3D city model",
+        "Building information modelling",
+        "Real-time monitoring",
+        "Analysis and decisions"
+      ],
+      "see": [
+        "DTM, DSM, mesh, orthophoto and 2D data in one place.",
+        "A 3D model of the city.",
+        "BIM: floors, structure, engineering systems.",
+        "Plan vs. actual, in real time.",
+        "Analysis and next steps."
+      ]
+    }
+  },
+  "twin": {
+    "sample": "Sample data",
+    "hint": "Point at a floor to inspect it",
+    "floorN": "Floor {n}",
+    "building": "Building",
+    "floors": "Floors",
+    "use": "Use",
+    "commercial": "Retail & services",
+    "residential": "Residential",
+    "area": "Area",
+    "elevation": "Elevation",
+    "progress": "Progress",
+    "done": "Complete",
+    "active": "In progress",
+    "waiting": "Not started",
+    "status": "Status",
+    "ok": "Normal",
+    "service": "Service scheduled",
+    "alert": "Needs attention",
+    "energy": "Energy",
+    "perDay": "kWh/day",
+    "issues": "Open issues",
+    "equipment": "Equipment",
+    "occupancy": "Occupied",
+    "hoa": "HOA fees paid",
+    "free": "Available",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "forSale": "Not for sale",
+    "m": "m"
+  },
+  "system": {
+    "title": "System overview",
+    "lead": "TwinCore brings everything from the city’s base data through planning, construction, monitoring and operation into one platform. Its four main parts are linked by objects with unique IDs.",
+    "modulesTitle": "Modules",
+    "archTitle": "System architecture",
+    "archLead": "Select a layer to see what goes in and what comes out.",
+    "stage": "{n} of {total}",
+    "prev": "Previous",
+    "next": "Next",
+    "steps": "Stages",
+    "build": {
+      "title": "Planned vs. actual",
+      "hint": "Drag along the chart to check any week",
+      "week": "Week {n}",
+      "planned": "Planned",
+      "actual": "Actual",
+      "variance": "Variance",
+      "ahead": "Ahead of plan",
+      "behind": "Behind plan",
+      "onTrack": "On schedule",
+      "future": "Future week — plan only",
+      "today": "Today",
+      "stage": "Stage",
+      "controls": "Integrated control",
+      "play": "Play the build",
+      "pause": "Pause",
+      "steps": {
+        "dig": "Excavating and preparing the ground",
+        "raft": "Laying the foundation",
+        "frame": "Frame: floor {n} of 25 — columns, beams, slab",
+        "envelope": "Outer walls: floor {n} of 25",
+        "windows": "Windows: floor {n} of 25",
+        "done": "Building complete"
+      },
+      "order": "Foundation → frame → outer walls → windows"
+    },
+    "parts": "What it covers",
+    "data": {
+      "title": "One map for all the data",
+      "layers": "Layers",
+      "layer": {
+        "ortho": "Aerial photo",
+        "dem": "Ground height",
+        "zoning": "Zoning",
+        "roads": "Roads and place names",
+        "utilities": "Utilities",
+        "works": "Construction packages",
+        "bim": "Building model (BIM)"
+      },
+      "pick": "Select a zone, work package or the BIM building on the map to see its data. Zoom with + / −.",
+      "zone": {
+        "res": "Residential zone",
+        "com": "Commercial zone",
+        "green": "Green space",
+        "public": "Public use",
+        "ind": "Industrial zone"
+      },
+      "far": "Building density (FAR)",
+      "maxHeight": "Height limit",
+      "m": "m",
+      "package": "Construction package",
+      "status": "Status",
+      "contractor": "Contractor",
+      "progress": "Progress",
+      "due": "Due",
+      "st": {
+        "done": "Complete",
+        "active": "In progress",
+        "late": "Behind",
+        "planned": "Planned"
+      },
+      "bimTitle": "Building model (BIM)",
+      "format": "File type",
+      "elements": "Parts",
+      "floors": "Floors",
+      "openTwin": "Open in the digital twin",
+      "mapLabel": "District map with layers",
+      "layerDesc": {
+        "ortho": "A detailed photo of the area taken from planes and satellites",
+        "dem": "How high and how steep the ground is, shaded like a relief map",
+        "zoning": "What each area of the city is meant for, from the master plan",
+        "roads": "Streets, roads and place names",
+        "utilities": "Water (blue), heating (red), power (violet)",
+        "works": "Each work package’s boundary and status",
+        "bim": "Where a detailed 3D building model sits on the map"
+      },
+      "place": "Ulaanbaatar, Sükhbaatar district",
+      "company": "Test company {c}",
+      "notAwarded": "Not yet awarded",
+      "planner": {
+        "title": "Planning: plot, building model, money",
+        "replay": "Replay",
+        "site": {
+          "what": "First, choose where to build. The system reads each candidate plot’s size, zoning and utility connections straight from the base data.",
+          "why": "So you know what can be built on a plot before you buy it."
+        },
+        "bim": {
+          "what": "The approved drawings lie on the plot, and the 3D building model (BIM) rises from them floor by floor.",
+          "why": "Every model is checked against the planning rules automatically: how much floor space the plot may hold (FAR) and how much of the plot the building may cover."
+        },
+        "finance": {
+          "what": "The model gives the floor area and the number of homes, so the cost follows directly: land, construction, design and VAT.",
+          "why": "Set against the sale price, you see the profit and the return before anything is decided."
+        },
+        "f": {
+          "plot": "Plot",
+          "zone": "Zoning",
+          "zoneV": "Residential · density ≤ {far} · covers ≤ {bcr}% of plot",
+          "infra": "Utilities",
+          "infraV": "Water, heating, power, road ✓",
+          "variant": "Option",
+          "variantV": "{id} · {n} floors · {h} homes",
+          "far": "Density / limit",
+          "bcr": "Plot covered / limit",
+          "plotV": "{w} × {d} m · {a} m²"
+        },
+        "live": {
+          "site": "Finding and checking the plot…",
+          "bim": "Building model rising: floor {n} of {of}",
+          "bimDone": "The model meets the planning rules",
+          "finance": "Working out cost and value…",
+          "financeDone": "Numbers ready for a decision"
+        }
+      }
+    },
+    "twin": {
+      "lodTitle": "How much detail the model shows",
+      "lod1": "The building as a simple block: just its size and height. Enough for city-wide questions like shadows and views.",
+      "lod2": "Adds the real roof shape and what stands on the roof.",
+      "lod3": "The outside in full: windows, balconies, entrance and doors.",
+      "lod4": "Looks inside: the floors, the frame that holds it up, and the pipes and ducts, shown with a cut-away.",
+      "simTitle": "What-if simulations",
+      "simNote": "For illustration — real runs use the measured ground heights and the 3D city model.",
+      "m": "m",
+      "kmh": "km/h",
+      "flood": {
+        "name": "Flood",
+        "desc": "On the terrain model, see where the river spreads as it rises: first the channel, then the floodplain, finally the street and buildings.",
+        "level": "Above normal river level",
+        "area": "Land under water",
+        "risk": "Buildings reached",
+        "state": "Situation",
+        "st": {
+          "banks": "Within its banks",
+          "plain": "Floodplain under water",
+          "city": "Street and buildings flooded"
+        }
+      },
+      "air": {
+        "name": "Air",
+        "desc": "Air pollution over the district: in still air with high emissions a haze covers everything; as the wind picks up the fog moves and breaks apart. The white streaks show wind direction and speed.",
+        "dir": "Wind direction",
+        "strength": "Emissions",
+        "pm": "Fine dust (PM2.5) across the area",
+        "status": "Status",
+        "ok": "Good",
+        "mid": "Moderate",
+        "bad": "Unhealthy",
+        "speed": "Wind speed",
+        "visibility": "Visibility"
+      },
+      "traffic": {
+        "name": "Traffic",
+        "desc": "As density rises there are more cars and they slow down. Every car keeps its distance to the one ahead.",
+        "load": "Load",
+        "speed": "Average speed",
+        "jams": "Congestion points",
+        "cars": "Cars on the road"
+      },
+      "geoai": {
+        "title": "AI that reads aerial photos",
+        "desc": "An AI model spots and counts buildings, cars, trees and other objects in a photo taken from the air.",
+        "run": "Run detection",
+        "building": "Buildings",
+        "car": "Cars",
+        "tree": "Trees",
+        "pool": "Pools",
+        "running": "Detecting…",
+        "stat": {
+          "objects": "Objects",
+          "conf": "How sure (avg)",
+          "time": "Time"
+        },
+        "sec": "s",
+        "mode": {
+          "boxes": "Boxes",
+          "segment": "Exact outlines"
+        },
+        "tile": "Aerial photo · 0.2 km²",
+        "caption": "Click a type to show or hide it; hover to highlight it. Each number shows how sure the AI is, out of 1.",
+        "inPhoto": {
+          "tree": "Trees in the photo",
+          "car": "Cars in the photo"
+        },
+        "captionTouch": "Tap a type to show or hide it. Each number shows how sure the AI is, out of 1."
+      },
+      "ha": "ha",
+      "ms": "m/s",
+      "km": "km",
+      "lodName": {
+        "1": "Simple block",
+        "2": "With roof",
+        "3": "Outside detail",
+        "4": "Inside view"
+      }
+    },
+    "control": {
+      "curveTitle": "Schedule and progress (4D)",
+      "packagesTitle": "Work packages: progress and funding",
+      "stages": {
+        "s1": "Land clearance",
+        "s2": "Foundations",
+        "s3": "Frame",
+        "s4": "Façade and services",
+        "s5": "Handover"
+      },
+      "status": "Status",
+      "progress": "Progress",
+      "plannedToday": "Due by today",
+      "budget": "Budget",
+      "paid": "Paid",
+      "due": "Due",
+      "bn": "bn ₮",
+      "legend": "Bar: actual progress. Tick: where the schedule says it should be today.",
+      "note": {
+        "planned": "Not started — funding plan approved.",
+        "overpaid": "Funding is {n}% ahead of physical progress — needs checking.",
+        "behind": "{n}% behind schedule.",
+        "ok": "Schedule and funding are in step."
+      },
+      "openWorkspace": "Open the workspace",
+      "workspaceLine": "A 29-section control workspace — with sample data.",
+      "open": "Open"
+    },
+    "monitor": {
+      "liveTitle": "Site sensors (simulation)",
+      "alertsTitle": "Warnings",
+      "kind": {
+        "crane": "Crane load",
+        "concrete": "Concrete temperature",
+        "settlement": "Ground sinking",
+        "tilt": "Lean",
+        "dust": "Dust",
+        "noise": "Noise"
+      },
+      "level": {
+        "ok": "Normal",
+        "warn": "Warning",
+        "alarm": "Alarm"
+      },
+      "about": {
+        "crane": "Crane lift load as a share of rated capacity. Above 95% lifting stops automatically.",
+        "concrete": "Core temperature of freshly poured concrete. Too hot and it cracks.",
+        "settlement": "How far the foundation has sunk since it was first measured.",
+        "tilt": "How far the building’s frame leans away from straight up.",
+        "dust": "Dust in the air at the edge of the site (PM10). Over the limit, water sprays start.",
+        "noise": "Noise on the side facing the neighbouring homes."
+      },
+      "limits": "Warning {w} {u} · alarm {a} {u}",
+      "now": "Simulated",
+      "yesterday": "Yesterday",
+      "log": {
+        "a": "Concrete sensor 8: 61 °C — cooling started",
+        "b": "Floor 8 concrete pour finished — 92 m³",
+        "c": "Crane 1: load at 96% — lifting stopped automatically",
+        "d": "Safety: guard rails at floor edges checked, issue closed"
+      },
+      "handover": {
+        "today": "Today",
+        "milestones": "Milestones",
+        "legend": {
+          "plan": "Plan",
+          "forecast": "Forecast",
+          "done": "Done"
+        },
+        "m": {
+          "topout": "Frame reaches full height",
+          "closed": "Walls and roof closed in",
+          "commission": "Building systems tested",
+          "handover": "Keys handed over"
+        },
+        "product": "Finished building — forecast handover",
+        "vsPlan": "Planned for {d} — {n} weeks behind",
+        "done": "{n}% complete",
+        "left": "{n} weeks to go",
+        "spec": {
+          "floors": "Floors",
+          "homes": "Homes",
+          "retail": "Ground floor",
+          "retailV": "Shops and services",
+          "handover": "Handed over",
+          "handoverV": "Fully finished, with occupancy permit"
+        }
+      },
+      "handoverTitle": "Schedule: from today to the finished building",
+      "pickHint": "Pick a sensor on the model or in the list to see its reading.",
+      "close": "Close",
+      "sim": {
+        "badge": "Simulation — not real sensors",
+        "title": "Everything on this page is simulated",
+        "body": "Readings and alerts are generated — no real devices are connected.",
+        "tag": "SIM"
+      }
+    },
+    "short": "How TwinCore works — from planning through construction to operation.",
+    "archLine": "Five layers, from collecting data to delivering it to users",
+    "kind": {
+      "all": "All",
+      "module": "Module",
+      "stage": "Stage",
+      "structure": "Structure"
+    },
+    "openModule": "Open the module",
+    "deck": {
+      "title": "Presentation modules and website sections",
+      "lead": "The presentation groups the platform into four modules. On the website they are shown in these sections.",
+      "colDeck": "In the presentation",
+      "colWeb": "On the website",
+      "in": "In the presentation",
+      "none": "No separate section on the website — shown on request",
+      "ask": "Ask for a demo",
+      "m": {
+        "plan": "Planning",
+        "build": "Construction",
+        "ops": "Operations",
+        "sales": "Sales"
+      },
+      "why": {
+        "plan": "Site selection, base data, analysis, options",
+        "build": "Schedule, progress, funding, quality, site monitoring",
+        "ops": "The 3D city model kept up to date while buildings are in use, with live sensor data",
+        "sales": "Choosing and booking homes on the 3D building model"
+      },
+      "here": "this page"
+    }
+  },
+  "contact": {
+    "lead": "Get in touch to learn about TwinCore or bring it to your organization.",
+    "phone": "Phone",
+    "email": "Email",
+    "web": "Web",
+    "address": "Address",
+    "addressText": "1001, Pearl Tower, 34 Juulchin Street, 3rd khoroo, Chingeltei district, Ulaanbaatar 15172",
+    "map": "Map ↗",
+    "addr": {
+      "office": "Pearl Tower, office 1001",
+      "street": "34 Juulchin Street",
+      "district": "3rd khoroo, Chingeltei district",
+      "city": "Ulaanbaatar 15172"
+    },
+    "directions": "Google Map",
+    "call": "Call",
+    "write": "Write",
+    "visit": "Open",
+    "responds": "Get in touch by phone or email about a demo, a price quote or bringing TwinCore to your organisation."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "← Back to the home page"
+  },
+  "bim": {
+    "explore": "Tap to explore",
+    "done": "Done",
+    "hint": "Drag to orbit · Click inside, then scroll to zoom · Select an element to see its properties",
+    "layers": "Layers",
+    "structure": "Structure",
+    "facade": "Facade",
+    "mep": "MEP",
+    "section": "Section",
+    "full": "Full",
+    "views": {
+      "iso": "3D",
+      "top": "Top",
+      "front": "Front"
+    },
+    "week": "Week",
+    "props": {
+      "title": "Selected element",
+      "ifc": "IFC class",
+      "name": "Name",
+      "level": "Level",
+      "material": "Material",
+      "size": "Dimensions",
+      "category": "Category",
+      "empty": "Select an element in the model to see its properties.",
+      "clear": "Close"
+    },
+    "ifc": {
+      "IfcFooting": "Raft foundation",
+      "IfcSlab": "Floor slab",
+      "IfcColumn": "Column",
+      "IfcBeam": "Beam",
+      "IfcWall": "Wall",
+      "IfcPlate": "Glazing panel",
+      "IfcMember": "Spandrel panel",
+      "IfcDuctSegment": "Duct segment",
+      "IfcPipeSegment": "Pipe segment",
+      "IfcUnitaryEquipment": "Plant unit",
+      "IfcDoor": "Door",
+      "IfcRailing": "Railing"
+    },
+    "material": {
+      "concrete": "Cast-in-place concrete C30/37",
+      "glass": "Double-glazed curtain wall",
+      "aluminium": "Aluminium panel",
+      "galvanised": "Galvanised steel",
+      "pipeHot": "Copper pipe — hot water",
+      "pipeCold": "Copper pipe — cold water",
+      "plant": "Steel casing",
+      "stone": "Natural stone",
+      "door": "Glazed door, bronze frame"
+    },
+    "built": "Built",
+    "working": "In progress",
+    "plannedPart": "Planned",
+    "viewFrom": "View from this apartment",
+    "backToModel": "Back to the model",
+    "site": "Site boundary",
+    "plainLevel": {
+      "floor": "Floor {n}",
+      "roof": "Roof",
+      "m": "m"
+    },
+    "plainProps": {
+      "title": "Selected part",
+      "name": "What it is",
+      "group": "Part of",
+      "level": "Floor",
+      "material": "Made of",
+      "size": "Size (w × d × h)",
+      "empty": "Click any part of the building to see what it is.",
+      "basement": "Basement",
+      "cat": {
+        "structure": "The frame that holds it up",
+        "facade": "Outside walls and glass",
+        "mep": "Pipes, ducts and wiring"
+      }
+    }
+  },
+  "tabs": {
+    "label": "Main menu",
+    "home": "Home",
+    "system": "System",
+    "contact": "Contact"
+  },
+  "footer": {
+    "partners": "Co-developers",
+    "partnersText": "TwinCore is a joint work of Tugs Spatial Mapify LLC and MonMap LLC."
+  },
+  "login": {
+    "title": "Log in",
+    "lead": "Sign in to the TwinCore platform or create an account.",
+    "signInTab": "Log in",
+    "signUpTab": "Sign up",
+    "name": "Name",
+    "company": "Company",
+    "optional": "(optional)",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "submit": "Log in",
+    "signUpSubmit": "Create account",
+    "busy": "Please wait…",
+    "help": "Need help?",
+    "contact": "Get in touch.",
+    "errors": {
+      "email": "That email address doesn’t look right.",
+      "name": "Please enter your name.",
+      "password": "The password must be at least 8 characters.",
+      "taken": "An account with this email already exists. Log in instead.",
+      "tooMany": "Too many failed attempts. Wait a moment and try again.",
+      "network": "Couldn’t reach the server. Check your connection.",
+      "credentials": "Wrong email or password.",
+      "signUp": "Couldn’t create the account. This email may already be registered."
+    }
+  },
+  "dev": {
+    "eyebrow": "Developer",
+    "title": "Accounts",
+    "lead": "Every TwinCore account and its sign-in activity, updated live.",
+    "loading": "Loading…",
+    "signedOut": "Sign in with a developer account to see this page.",
+    "login": "Log in",
+    "forbidden": "This account isn’t on the developer list. Add its email to DEV_EMAILS in the Convex deployment.",
+    "search": "Search name, email or company",
+    "empty": "No accounts match.",
+    "you": "you",
+    "revoke": "Sign out",
+    "revokeConfirm": "Sign {who} out on every device?",
+    "stats": {
+      "users": "Accounts",
+      "online": "With active sessions",
+      "newThisWeek": "New this week",
+      "signInsToday": "Signed in today"
+    },
+    "cols": {
+      "account": "Account",
+      "company": "Company",
+      "joined": "Joined",
+      "lastSignIn": "Last sign-in",
+      "sessions": "Active sessions"
+    }
+  }
+}

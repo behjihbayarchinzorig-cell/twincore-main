@@ -1,0 +1,357 @@
+@import 'tailwindcss';
+
+/* Palette: deep navy surfaces; blue accents running from sky blue (#60a5fa) to deep blue (#1e40af) */
+@theme inline {
+  --color-ink: #060b18;
+  --color-surface: #0d1628;
+  --color-raised: #1a2a47;
+  --color-line: #1e2d4a;
+  --color-fg: #eaf1ff;
+  --color-mute: #8ea6cc;
+  --color-accent-soft: #93c5fd;
+  --color-accent-hi: #60a5fa;
+  --color-accent: #3b82f6;
+  --color-accent-deep: #1e40af;
+  /* Roboto for everything; "mono" is a small-label style with tabular figures, not a separate face */
+  --font-display: var(--font-roboto), system-ui, sans-serif;
+  --font-sans: var(--font-roboto), system-ui, sans-serif;
+  --font-mono: var(--font-roboto), system-ui, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-fg font-sans text-base leading-[1.6] antialiased;
+    /* a soft blue glow at the top of the page, deepening into navy */
+    background:
+      radial-gradient(1100px 520px at 50% -160px, rgb(37 99 235 / 0.22), transparent 70%),
+      var(--color-ink);
+  }
+  h1, h2, h3 {
+    @apply font-display font-medium tracking-[-0.025em];
+  }
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+  }
+}
+
+/* Hero model fades into the page: top/bottom on phones, plus the right edge under the text on large screens */
+@layer components {
+  /* The hero frame tilts back a little and settles flat as it scrolls into view (--settle runs 0 → 1). */
+  .hero-frame {
+    transform: perspective(1600px) rotateX(calc((1 - var(--settle, 1)) * 10deg)) scale(calc(0.94 + var(--settle, 1) * 0.06));
+    transform-origin: 50% 0;
+    transition: transform 0.15s linear;
+  }
+}
+
+/* Floors of the twin building rise into place on first paint */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+@utility animate-rise {
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Language flag turns over when switched */
+@keyframes flip {
+  from { transform: perspective(80px) rotateY(90deg); }
+}
+@utility animate-flip {
+  animation: flip 0.35s ease-out;
+}
+
+/* Details panel slides in from the side when an element is picked */
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(24px); }
+}
+@utility animate-slide-in {
+  animation: slide-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Stage explanation fades in when the stage changes */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+}
+@utility animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+/* The next line of a narration slides in; the text never blinks out in between */
+@keyframes swap-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@utility animate-swap {
+  animation: swap-in 0.6s cubic-bezier(.2,.7,.2,1) both;
+}
+/* Loading: a soft light sweeping across the placeholder (instead of a blinking box) */
+@keyframes shimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+@utility shimmer {
+  background-color: #0a1222;
+  background-image: linear-gradient(100deg, transparent 30%, rgb(96 165 250 / 0.07) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+/* a page arriving after navigation */
+@keyframes page-in {
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
+}
+@utility animate-page {
+  animation: page-in 0.35s ease-out both;
+}
+/* content arriving once it has loaded */
+@keyframes arrive {
+  from { opacity: 0; }
+}
+@utility animate-arrive {
+  animation: arrive 0.6s ease-out both;
+}
+
+/* a bar that fills over --dur */
+@keyframes fill-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@utility animate-fill {
+  transform-origin: left;
+  animation: fill-bar var(--dur, 5s) linear both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-swap, .shimmer, .animate-arrive, .animate-page { animation: none; }
+  .animate-fill { animation: none; transform: scaleX(1); }
+}
+
+/* Soft pulsing glow on the paused play button */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 94 70 / 0.45); }
+  50% { box-shadow: 0 0 14px 3px rgb(255 94 70 / 0.4); }
+}
+@utility animate-glow {
+  animation: glow 2.4s ease-in-out infinite;
+}
+
+/* Progress line under the stage that is playing */
+@keyframes grow {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-24px); }
+}
+@utility animate-slide-in-left {
+  animation: slide-in-left 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Moving dashes along a data-flow connector */
+@keyframes flow {
+  to { stroke-dashoffset: -16; }
+}
+@utility animate-flow {
+  animation: flow 0.8s linear infinite;
+}
+
+/* Sideways-scrolling rows (tabs on phones) without a visible scrollbar */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* A slim scrollbar in the site's blue, for side lists that scroll on their own (the workspace menu) */
+@utility thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(59 130 246 / 0.55) transparent;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgb(30 45 74 / 0.5);
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgb(59 130 246 / 0.55);
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(96 165 250 / 0.85);
+  }
+}
+
+/* Leaflet map: labels and controls in the site's colours */
+.tc-map .leaflet-container,
+.tc-map.leaflet-container {
+  background: #0a1222;
+  font-family: var(--font-roboto), system-ui, sans-serif;
+}
+.tc-map .tc-tip {
+  background: rgb(33 26 25 / 0.85);
+  border: 1px solid #1e2d4a;
+  border-radius: 4px;
+  color: #eaf1ff;
+  font-size: 11px;
+  padding: 1px 6px;
+  box-shadow: none;
+}
+.tc-map .tc-tip::before {
+  display: none;
+}
+.tc-map .leaflet-control-zoom a,
+.tc-map .leaflet-control-scale-line {
+  background: rgb(33 26 25 / 0.88);
+  color: #eaf1ff;
+  border-color: #1e2d4a;
+}
+.tc-map .leaflet-control-attribution {
+  background: rgb(33 26 25 / 0.75);
+  color: #8ea6cc;
+  font-size: 10px;
+}
+.tc-map .leaflet-control-attribution a {
+  color: #93c5fd;
+}
+
+/* Base-data map: each layer's pane fades; utility lines flow; late packages pulse; the picked shape glows */
+.tc-map .tc-pane {
+  transition: opacity 0.6s ease;
+}
+.tc-map .tc-flow {
+  animation: tc-flow 1.4s linear infinite;
+}
+.tc-map .tc-flow-heat {
+  animation-duration: 1s;
+}
+.tc-map .tc-flow-power {
+  animation-duration: 0.7s;
+}
+@keyframes tc-flow {
+  to { stroke-dashoffset: -32; }
+}
+.tc-map .tc-late {
+  animation: tc-pulse 1.8s ease-in-out infinite;
+}
+@keyframes tc-pulse {
+  50% { fill-opacity: 0.5; stroke-width: 4; }
+}
+.tc-map .tc-shape {
+  transition: fill-opacity 0.3s, stroke-width 0.3s, filter 0.3s;
+}
+.tc-map .tc-shape:hover {
+  fill-opacity: 0.42;
+}
+.tc-map .tc-lit {
+  stroke-width: 4;
+  fill-opacity: 0.5;
+  filter: drop-shadow(0 0 10px rgb(96 165 250 / 0.9));
+}
+@media (prefers-reduced-motion: reduce) {
+  .tc-map .tc-flow, .tc-map .tc-late { animation: none; }
+}
+
+/* Front-page text arriving in sequence: each piece rises and sharpens into place */
+/* (opacity and movement only: they run off the main thread, so the words stay smooth while the 3D scene loads) */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.45em, 0);
+  }
+}
+@utility animate-word {
+  animation: word-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Schedule bars grow in from the left */
+@keyframes bar-in {
+  from {
+    clip-path: inset(0 100% 0 0 round 6px);
+  }
+}
+@utility animate-bar {
+  animation: bar-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* A callout popping out of its marker */
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    transform: none;
+  }
+}
+@utility animate-pop {
+  animation: pop 0.38s cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+  transform-origin: 0 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-pop {
+    animation: none;
+  }
+}
+
+/* Touch screens: every control is at least 44px tall, so it can be hit with a thumb */
+@media (pointer: coarse) {
+  button,
+  [role='tab'],
+  [role='radio'],
+  select {
+    min-height: 44px;
+  }
+  header a,
+  a.inline-flex {
+    min-height: 44px;
+  }
+  .tc-map.leaflet-touch .leaflet-bar a {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+  }
+  [data-round] {
+    min-width: 44px;
+  }
+  [data-strip] a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+}
+
+/* The important things in blue that deepens: light sky blue into deep blue */
+@utility bg-grad {
+  background-image: linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #1e3a8a 100%);
+}
+@utility text-grad {
+  background-image: linear-gradient(120deg, #93c5fd 0%, #3b82f6 50%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

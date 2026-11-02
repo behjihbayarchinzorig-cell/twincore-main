@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="mn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TwinCore — Дижитал твин платформ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap">
+<style>
+:root{--bg:#020c1f;--panel:#0a1a30;--line:#17304d;--cy:#5bbde0;--te:#3fc1c9;--am:#ffb957;--tx:#e8f1fa;--mu:#8ea3b8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.65 Montserrat,system-ui,sans-serif}
+h1,h2,h3,h4,.serif{font-family:'Playfair Display',Georgia,serif;font-weight:700;margin:0}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+.top{position:absolute;top:0;left:0;right:0;z-index:3;padding:22px 0}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font:700 24px 'Playfair Display',serif}.logo i{font-style:normal;color:var(--cy)}
+nav{display:flex;gap:22px;font-size:14px;flex-wrap:wrap}nav a{color:var(--mu)}nav a:hover{color:var(--tx)}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px);pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(2,12,31,.88),rgba(2,12,31,.25) 62%,transparent),linear-gradient(0deg,var(--bg),transparent 22%);pointer-events:none}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.hero h1{font-size:clamp(56px,11vw,120px);line-height:1}
+.hero p{color:#c3d3e3;max-width:480px;margin:18px 0 30px;font-size:18px}
+.eyebrow{color:var(--cy);letter-spacing:.14em;font-size:13px;font-weight:600;margin:0 0 14px;text-transform:uppercase}
+.cta{display:inline-block;background:var(--am);color:#1a1205;font-weight:600;padding:14px 28px;border-radius:999px}
+.sec{padding:96px 0}
+h2{font-size:clamp(28px,4vw,42px)}
+h2::after{content:"";display:block;width:56px;height:4px;margin-top:12px;background:linear-gradient(90deg,var(--cy) 75%,var(--am) 75%)}
+.lead{color:var(--mu);max-width:720px;margin:20px 0 0}
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:40px}
+.mod{font:inherit;color:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;padding:22px;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--cy);border-radius:12px;transition:background .2s,border-color .2s}
+.mod:hover,.mod[aria-expanded=true]{background:#0e2440;border-color:var(--cy)}
+.mod.am{border-top-color:var(--am)}.mod.am:hover,.mod.am[aria-expanded=true]{border-color:var(--am)}
+.mod .n{font:700 13px 'Playfair Display',serif;color:var(--cy)}.mod.am .n{color:var(--am)}
+.mod .t{font-size:24px}.mod .en{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.mod p{margin:8px 0 12px;color:#b4c3d2;font-size:14px;flex:1}
+.mod .more{font-size:13px;font-weight:600;color:var(--cy)}.mod.am .more{color:var(--am)}
+.more::after{content:" +"}.mod[aria-expanded=true] .more::after{content:" −"}
+.detail{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px}
+.detail[hidden]{display:none}
+.dh{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.dh h3{font-size:28px}.dh small{font:500 12px Montserrat,sans-serif;color:var(--am);letter-spacing:.14em;text-transform:uppercase;margin-left:8px}
+.dh p{color:var(--mu);margin:8px 0 0;max-width:680px}
+.x,.add,[data-del]{font:inherit;font-size:14px;color:var(--tx);background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;display:inline-block}
+.x:hover,.add:hover,[data-del]:hover{border-color:var(--cy)}
+.chain{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:24px 0 0}
+.chain li{padding:6px 14px;border:1px solid var(--cy);border-radius:999px;font-size:14px}
+.chain li:not(:last-child)::after{content:"→";margin-left:10px;color:var(--am)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:24px}
+.steps article{background:#071427;border:1px solid var(--line);border-radius:10px;padding:18px}
+.steps b{font:700 13px 'Playfair Display',serif;color:var(--cy)}
+.steps h4{margin:6px 0;font-size:18px}.steps p{margin:0 0 10px;color:var(--mu);font-size:14px}
+.steps ul{margin:0;padding-left:18px;font-size:14px}
+.out{margin-top:24px}.out h4{font-size:16px;color:var(--am)}
+.tags{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.tags li{background:#0e2440;border-radius:6px;padding:6px 12px;font-size:14px}
+.pic{margin-top:24px}.pic img{max-width:100%;max-height:460px;border-radius:10px;display:block;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:40px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px}
+.card b{font:700 13px 'Playfair Display',serif;color:var(--cy)}.card h3{font-size:20px;margin:6px 0 8px}.card p{margin:0;color:var(--mu);font-size:14px}
+.note{color:var(--mu);font-size:14px;margin-top:18px;border-left:3px solid var(--am);padding-left:14px;max-width:720px}
+.pc ul{list-style:none;padding:0;margin:12px 0 18px;font-size:14px;color:#b4c3d2}.pc li{padding:6px 0;border-bottom:1px solid var(--line)}
+.pc.off{opacity:.45}
+.inc{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mu);margin-bottom:10px;cursor:pointer}
+.fee{display:block;font-size:13px;color:var(--mu)}
+.fee span{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--line);margin-top:4px}
+.fee input{flex:1;min-width:0;background:transparent;border:0;color:var(--tx);font:700 22px 'Playfair Display',serif;padding:6px 0;outline:0}
+.fee span:focus-within{border-color:var(--cy)}
+.tot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:16px;background:#0f2a47;border:1px solid var(--line);border-radius:12px;padding:20px 24px}
+.tot h3{font-size:24px}.tot div{font:700 30px 'Playfair Display',serif;color:var(--am)}
+.sec[hidden],nav a[hidden]{display:none}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mu);font-size:14px;text-align:center}
+:focus-visible{outline:2px solid var(--am);outline-offset:2px}
+@media(max-width:600px){.sec{padding:64px 0}nav{gap:14px}.detail{padding:20px}}
+.bar{position:relative;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:14px 0}
+.bar .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.menu{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:14px}
+.menu>a,.dd>a{color:var(--mu);padding:8px 12px;border-radius:8px;display:block}
+.menu a:hover,.menu a.on{color:var(--tx)}.menu a.on{background:#0e2440}
+.dd{position:relative}
+.sub{display:none;position:absolute;top:100%;left:0;min-width:210px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;flex-direction:column;z-index:6}
+.dd:hover .sub,.dd:focus-within .sub{display:flex}
+.sub a{padding:9px 12px;border-radius:6px;color:var(--mu)}.sub a:hover{background:#0e2440;color:var(--tx)}
+.hero{min-height:calc(100svh - 64px)}
+.more::after{content:" →"}
+.crumb{font-size:13px;color:var(--mu);margin:0 0 18px}.crumb a{color:var(--cy)}
+.pn{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}.pn a{color:var(--cy);font-weight:600}
+.card h3 a:hover{color:var(--am)}.lnk{color:var(--cy)}
+@media(max-width:700px){.sub{display:none!important}}
+</style></head><body>
+
+<header class="bar"><div class="wrap"><a class="logo" href="#/">Twin<i>Core</i></a>
+<nav class="menu"><a data-p="home" href="#/">Нүүр</a>
+<div class="dd"><a data-p="mods" href="#/plan">Системийн модуль ▾</a><div class="sub"><a href="#/plan">Төлөвлөлт</a><a href="#/build">Барилгын явц</a><a href="#/plat">Платформ</a><a href="#/sales">Борлуулалт</a></div></div>
+<a data-p="benefit" href="#/benefit">Үр ашиг</a><a data-p="price" href="#/price">Үнийн төсөөлөл</a><a data-p="contact" href="#/contact">Холбоо барих</a></nav></div></header>
+<main id="main">
+<div class="pg" data-p="home">
+<header class="hero"><canvas id="px" aria-label="Монголын тал нутаг, уул, гэр, морь, бүргэдийн пиксел зураг" role="img"></canvas>
+<div class="wrap"><p class="eyebrow">Эхлэгчдэд бус — мэргэжлийн багт</p><h1>TwinCore</h1>
+<p>Барилгын төлөвлөлтөөс ашиглалт хүртэлх дижитал твин платформ</p><a class="cta" href="#/plan">Системтэй танилцах</a></div></header>
+<section class="sec"><div class="wrap"><p class="eyebrow">TwinCore</p><h2>Системийн тойм</h2>
+<p class="lead">TwinCore нь барилга, дэд бүтцийн төслийг төлөвлөлтөөс борлуулалт хүртэл нэг дижитал ихэр загвар дээр нэгтгэн удирддаг систем юм. Модуль бүр өөрийн хуудастай.</p>
+<div class="mods" id="mods"></div></div></section></div>
+<section class="pg sec" data-p="benefit" hidden><div class="wrap"><p class="eyebrow">Хүлээгдэж буй үр дүн</p><h2>Үр ашиг</h2>
+<p class="lead">TwinCore-ыг нэвтрүүлсэн байгууллагад бий болохоор хүлээгдэж буй ашиг тус.</p><div class="grid" id="ben"></div>
+<p class="note">Дээрх нь хэрэгжилтийн үед хүлээгдэж буй үр дүн бөгөөд тухайн төслийн онцлог, оруулсан өгөгдлийн чанараас хамаарна.</p></div></section>
+<section class="pg sec" data-p="price" hidden><div class="wrap"><p class="eyebrow">Тооцоолуур</p><h2>Үнийн төсөөлөл</h2>
+<p class="lead">Хэрэгцээт модулиа сонгож, жилийн төлбөрийн дүнг оруулан нийт дүнг харна уу.</p><div class="grid" id="pg"></div>
+<div class="tot"><h3>Нийт дүн</h3><div><span id="total">0</span> ₮ <small style="font:500 13px Montserrat;color:var(--mu)">/ жил</small></div></div></div></section>
+<section class="pg sec" data-p="contact" hidden><div class="wrap"><p class="eyebrow">Monmap LLC</p><h2>Холбоо барих</h2>
+<p class="lead">TwinCore-той танилцах, нэвтрүүлэх талаар бидэнтэй холбогдоорой.</p>
+<div class="grid"><div class="card"><b>УТАС</b><h3><a href="tel:+97670111791">+976 7011 1791</a></h3></div>
+<div class="card"><b>ИМЭЙЛ</b><h3><a href="mailto:bilguuntugs50@gmail.com">bilguuntugs50@gmail.com</a></h3></div>
+<div class="card"><b>ВЭБ</b><h3><a href="https://www.monmap.mn" target="_blank" rel="noopener">www.monmap.mn</a></h3></div>
+<div class="card"><b>ХАЯГ</b><p>1001, Pearl Tower, Жуулчны гудамж-34, 3-р хороо, ЧД, Улаанбаатар 15172</p><p><a class="lnk" href="https://maps.app.goo.gl/tbbCfmevYhsoJigz7" target="_blank" rel="noopener">Газрын зураг ↗</a></p></div></div></div></section>
+</main>
+<footer>© 2026 TwinCore</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const M=[
+{k:'plan',mn:'Төлөвлөлт',en:'Planning',s:'AI төлөвлөлт, BIM, хиймэл дагуулын шинжилгээ, өртгийн тооцоо, FAR/BCR хяналт',
+lead:'Талбайн нөхцөлөөс эхлээд батлагдсан дижитал загвар хүртэл таван үе шаттай. Хувилбар ба үнэлгээний үе шат шаардлагатай бол давтагдана.',
+steps:[['Талбай судлах','Талбайн нөхцөлийг өгөгдлөөр тодорхойлно',['Хиймэл дагуулын шинжилгээ','Одоогийн байдал','Дэд бүтэц']],['Шинжилгээ','Зураглалын системээр давхаргыг шинжилнэ',['Тохиромж','Эрсдэл','Зураглалын систем']],['Хувилбар','AI-аар олон төлөвлөлтийн хувилбар гаргана',['AI олон хувилбарт дизайн','Хот төлөвлөлт','Блок төлөвлөлт']],['Үнэлэх','Хувилбаруудыг өртөг, стандартаар харьцуулна',['Өртгийн тооцоо','FAR · BCR','Монгол ба олон улсын стандарт']],['Батлах','Сонгосон хувилбарыг дижитал загвар болгоно',['BIM загвар','Интеграц','Game engine дүрслэл']]],
+out:['Дараагийн шат',['Барилгын явц']]},
+{k:'build',mn:'Барилгын явц',en:'Construction process',s:'Төлөвлөгөө, гүйцэтгэл, санхүү, чанар, HSE-ийн цогц хяналт; S-curve, KPI',
+lead:'Бүтээн байгуулалтын бүх шатыг нэг загвар дээр цогцоор хянана.',
+chain:['Utility','ИБАХ','Орон сууц','Барилга','Улсын комисс хүлээн авах'],
+steps:[['Ажлын төлөвлөгөө','BIM, мастер төсөвт суурилсан',[]],['Гүйцэтгэлийн хяналт','Төлөвлөгөө ба бодит',[]],['Санхүүгийн хяналт','Төсөв, зардал, төлбөр',[]],['Чанарын хяналт','Шалгалт, үл нийцэл',[]],['Аюулгүй ажиллагаа','Safety',[]],['HSE','Эрүүл мэнд, байгаль орчин',[]]],
+out:['Үр дүн: S-curve — төсөл эхлэхээс дуусах хүртэл',['Ажлын бүтээмжийн хяналт','Ажлын хурд, хоцрогдол','Ажил зарлах','Critical analysis — зогсож болохгүй ажил','KPI мониторинг']]},
+{k:'plat',mn:'Платформ',en:'Platform',s:'Хөрөнгийн удирдлага, ухаалаг төсөл, удирдлагын платформ, орон сууц ба СӨХ',
+lead:'Барилга ашиглалтад орсны дараа — 4 чиглэлээр удирдана.',
+steps:[['Хөрөнгийн удирдлага','Барилга, тоног төхөөрөмж нэг дор',['Засвар','Насжилт','Бүртгэл','Тооцоо','Цогц мониторинг']],['Ухаалаг төсөл','Барилга, дэд бүтцийг ихрээр удирдах',['Барилга','Дэд бүтэц']],['Удирдлагын платформ','Бүх төсөл нэг самбарт',['Нэгдсэн самбар','Шийдвэр гаргалт','Тайлан']],['Орон сууц','Ашиглалтын нэмэлт үнэ цэнэ',['Орлого олох боломж','СӨХ']]]},
+{k:'sales',mn:'Борлуулалт',en:'Sales',s:'Вэб платформ, game engine-ээр дижитал ихрийг харилцагчид үзүүлж борлуулах',
+lead:'Төлөвлөлтийн шатны загварыг харилцагчид шууд үзүүлж, захиалгыг баталгаажуулна.',
+steps:[['Дижитал твин','Төлөвлөлтийн шатны BIM загварыг борлуулалтад шууд ашиглана',[]],['Game engine','Гэрэлтүүлэг, орчин, харагдацыг бодитоор дүрсэлнэ',[]],['Вэб платформ','Харилцагч аливаа төхөөрөмжөөс вебээр нэвтэрнэ',[]],['Худалдаа','Орон сууцаа сонгож, захиалгаа шууд баталгаажуулна',[]]],
+out:['Худалдан авагчид харах боломж',['3D · 360° харах','Төлөвлөлт','Цонхны харагдац','Нарны гэрэлтүүлэг · 24 цаг','Захиалга өгөх']]}];
+
+const li=a=>a.map(t=>`<li>${t}</li>`).join('');
+const main=$('#main'),imgs={};
+$('#mods').innerHTML=M.map((m,i)=>`<a class="mod${i==3?' am':''}" href="#/${m.k}"><span class="n">0${i+1}</span><span class="t serif">${m.mn}</span><span class="en">${m.en}</span><p>${m.s}</p><span class="more">Дэлгэрэнгүй</span></a>`).join('');
+const pic=k=>{document.querySelector(`.pic[data-k="${k}"]`).innerHTML=imgs[k]?`<img src="${imgs[k]}" alt=""><button data-del>Зураг устгах</button>`:`<label class="add">+ Зураг нэмэх<input type="file" accept="image/*" hidden></label>`};
+M.forEach((m,i)=>{const pv=M[i-1],nx=M[i+1],s=document.createElement('section');s.className='pg sec';s.dataset.p=m.k;s.hidden=true;
+s.innerHTML=`<div class="wrap"><p class="crumb"><a href="#/">Нүүр</a> › Системийн модуль › ${m.mn}</p><div class="dh"><div><h2>${m.mn}<small>${m.en}</small></h2><p class="lead">${m.lead}</p></div></div>`
++(m.chain?`<ol class="chain">${li(m.chain)}</ol>`:'')
++`<div class="steps">${m.steps.map((x,j)=>`<article><b>${String(j+1).padStart(2,'0')}</b><h4>${x[0]}</h4><p>${x[1]}</p>${x[2].length?`<ul>${li(x[2])}</ul>`:''}</article>`).join('')}</div>`
++(m.out?`<div class="out"><h4>${m.out[0]}</h4><ul class="tags">${li(m.out[1])}</ul></div>`:'')
++`<div class="pic" data-k="${m.k}"></div><div class="pn">${pv?`<a href="#/${pv.k}">← ${pv.mn}</a>`:'<span></span>'}${nx?`<a href="#/${nx.k}">${nx.mn} →</a>`:'<a href="#/benefit">Үр ашиг →</a>'}</div></div>`;
+main.appendChild(s);pic(m.k)});
+main.onclick=e=>{const d=e.target.closest('[data-del]');if(d){const k=d.parentNode.dataset.k;delete imgs[k];pic(k)}};
+main.onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const k=e.target.closest('.pic').dataset.k,r=new FileReader();r.onload=()=>{imgs[k]=r.result;pic(k)};r.readAsDataURL(f)};
+
+$('#ben').innerHTML=[['Нэгдсэн мэдээллийн сан','Төслийн бүх мэдээллийг нэг мэдээллийн санд төвлөрүүлнэ.'],['Зардлын хэмнэлт','Төсвийн гүйцэтгэлийг хянаж, хэтрэлтээс урьдчилан сэргийлэх боломжтой болно.'],['Хугацааны хяналт','Ажлын хоцрогдлыг гүйцэтгэлийн үзүүлэлтээр эрт илрүүлнэ.'],['Чанар, аюулгүй байдал','Үл нийцлийг бодит хугацаанд бүртгэж, шуурхай арилгуулна.'],['Оновчтой шийдвэр','Хиймэл оюунд суурилсан дүн шинжилгээгээр шийдвэр гаргалтыг дэмжинэ.'],['Борлуулалтын өсөлт','Барилгыг ашиглалтад орохоос өмнө 3D орчинд танилцуулж борлуулах боломжтой.']].map((b,i)=>`<div class="card"><b>0${i+1}</b><h3>${b[0]}</h3><p>${b[1]}</p></div>`).join('');
+
+const PM=[['Төлөвлөлт',['Хиймэл оюунаар төлөвлөх','BIM загварчлал','Өртөг, төсвийн тооцоо']],['Бүтээн байгуулалт',['Системийн цогц интеграчлал','Ажлын гүйцэтгэлийн хяналт','Чанар, аюулгүй ажиллагаа']],['Ашиглалтын платформ',['Хөрөнгийн менежмент','Удирдлагын хяналтын самбар','Орон сууцны үйлчилгээ']],['Борлуулалт',['3D интерактив game engine','Борлуулалтын вэб платформ','Захиалгын бүртгэл']]];
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+$('#pg').innerHTML=PM.map((p,i)=>`<div class="card pc"><label class="inc"><input type="checkbox" checked> Багтаах</label><b>МОДУЛЬ 0${i+1}</b><h3>${p[0]}</h3><ul>${li(p[1])}</ul><label class="fee">Жилийн төлбөр<span><input inputmode="numeric" placeholder="0" aria-label="${p[0]} жилийн төлбөр"> ₮</span></label></div>`).join('');
+function tot(){let s=0;document.querySelectorAll('.pc').forEach(c=>{const on=c.querySelector('.inc input').checked;c.classList.toggle('off',!on);if(on)s+=+c.querySelector('.fee input').value.replace(/\D/g,'')});$('#total').textContent=fmt(s)}
+$('#pg').oninput=e=>{if(e.target.type==='text'||e.target.inputMode){const v=e.target.value.replace(/\D/g,'');e.target.value=v?fmt(+v):''}tot()};
+
+const PG=[...document.querySelectorAll('.pg')],NM={home:'',benefit:'Үр ашиг',price:'Үнийн төсөөлөл',contact:'Холбоо барих'};M.forEach(m=>NM[m.k]=m.mn);
+function route(){const k=location.hash.replace(/^#\/?/,'')||'home',p=PG.find(x=>x.dataset.p===k)||PG[0],id=p.dataset.p,isM=M.some(m=>m.k===id);
+PG.forEach(x=>x.hidden=x!==p);
+document.querySelectorAll('.menu a[data-p]').forEach(a=>a.classList.toggle('on',a.dataset.p===id||(a.dataset.p==='mods'&&isM)));
+document.title=(NM[id]?NM[id]+' — ':'')+'TwinCore';
+scrollTo({top:0,behavior:'instant'});dispatchEvent(new Event('resize'))}
+addEventListener('hashchange',route);route();
+
+/* Pixel art: Mongolian landscape — mountains, steppe, gers, horses, eagle */
+(()=>{const c=$('#px'),g=c.getContext('2d');let W,H;
+const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const R=(x,y,w,h,k)=>{g.fillStyle=k;g.fillRect(Math.round(x),Math.round(y),w,h)};
+const spr=(m,x,y,k)=>m.forEach((r,j)=>{for(let i=0;i<r.length;i++)if(r[i]==='x')R(x+i,y+j,1,1,k)});
+const SKY=['#020a1c','#03102a','#04173a','#061f4a','#0a2a5e','#0f3a72','#1b4f80','#3a6a8a','#9a7a62','#e0a05a'];
+const L=[{s:1.5,b:.6,a:.26,f:[.021,.047,.11],k:'#0d2b52',cap:1},{s:4,b:.66,a:.12,f:[.03,.07,.15],k:'#0a3a5c'},{s:9,b:.7,a:.06,f:[.045,.09,.2],k:'#0b4a55'}];
+const ST=Array.from({length:70},(_,i)=>[(i*97%251)/251,(i*53%71)/71*.55,i%7]);
+const HA=['........xx','.......xxx','xxxxxxxxx.','xxxxxxxxx.','.xxxxxxx..','.x.x..x.x.','.x.x..x.x.'],HB=['........xx','.......xxx','xxxxxxxxx.','xxxxxxxxx.','.xxxxxxx..','x...x..x..','..x...x..x'];
+const EA=['x.....x','.xx.xx.','..xxx..'],EB=['.......','xxxxxxx','..xxx..'];
+const ger=(x,y)=>{R(x,y-4,10,4,'#d9e6ef');R(x+1,y-6,8,2,'#eef5fa');R(x+3,y-8,4,2,'#eef5fa');R(x+4,y-9,2,1,'#ffb957');R(x+4,y-3,2,3,'#d1603a');R(x+8,y-11,1,3,'#8ea3b8');R(x,y,10,1,'#04161d')};
+function draw(t){const hz=Math.round(H*.7);
+SKY.forEach((k,i)=>R(0,i*hz/SKY.length,W,Math.ceil(hz/SKY.length)+1,k));
+ST.forEach(s=>R(s[0]*W,s[1]*H,1,1,((t*2+s[2])|0)%3?'#4b6d90':'#e8f1fa'));
+const sx=W*.74,sy=H*.4;R(sx-8,sy-8,16,16,'#ffb95722');R(sx-5,sy-4,10,8,'#ffb957');R(sx-4,sy-5,8,10,'#ffb957');
+for(let i=0;i<4;i++){const x=((i*90+t*(3+i))%(W+60))-30,y=H*(.12+i*.07);R(x,y,26,3,'#1d4a7a99');R(x+5,y-2,14,2,'#1d4a7a99');R(x+9,y+3,10,1,'#1d4a7a99')}
+spr(((t*3)|0)%2?EA:EB,(t*16%(W+40))-20,H*.22+Math.sin(t)*7,'#d9e6ef');
+L.forEach(l=>{const o=t*l.s;for(let x=0;x<W;x++){const w=x+o,h=Math.sin(w*l.f[0])*.5+Math.sin(w*l.f[1]+2)*.35+Math.sin(w*l.f[2]+5)*.15,y=Math.round(H*(l.b-l.a*(h+1)/2)/2)*2;R(x,y,1,hz-y+2,l.k);if(l.cap&&y<H*.42)R(x,y,1,2,'#cfe6f5')}});
+R(0,hz,W,H-hz,'#06242e');R(0,hz,W,2,'#0e5a4a');
+for(let k=0;k<7;k++){const f=(k/7+t*.06)%1;R(0,hz+f*f*(H-hz),W,1,'#3fc1c91f')}
+for(let i=-9;i<=9;i++)for(let y=hz;y<H;y++)R(W/2+i*(2+(y-hz)*.8),y,1,1,'#3fc1c91a');
+const P=W+90;[0,1,2].forEach(i=>ger(((i*(P/3)-t*14)%P+P)%P-30,hz+8+(i%2)*6));
+const f=((t*8)|0)%2;spr(f?HA:HB,(t*18%(W+40))-20,hz+22,'#a86a3a');spr(f?HB:HA,((t*13+80)%(W+40))-20,hz+30,'#e6dccb')}
+const size=()=>{H=150;W=Math.ceil(H*c.clientWidth/Math.max(c.clientHeight,1));c.width=W;c.height=H;draw(0)};
+const t0=performance.now();
+const loop=n=>{if(c.getBoundingClientRect().bottom>0)draw((n-t0)/1000);requestAnimationFrame(loop)};
+size();addEventListener('resize',size);if(!rm)requestAnimationFrame(loop)})();
+</script></body></html>
