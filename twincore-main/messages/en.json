@@ -368,7 +368,7 @@
     },
     "twin": {
       "lodTitle": "How much detail the model shows",
-      "lod1": "The building as a simple block: just its size and height. Enough for city-wide questions like shadows and views.",
+      "lod1": "The building as a simple block: its size and height. Used for city-wide analysis such as shadows and views.",
       "lod2": "Adds the real roof shape and what stands on the roof.",
       "lod3": "The outside in full: windows, balconies, entrance and doors.",
       "lod4": "Looks inside: the floors, the frame that holds it up, and the pipes and ducts, shown with a cut-away.",
