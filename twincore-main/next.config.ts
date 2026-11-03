@@ -7,6 +7,7 @@ const MOVED: Record<string, string> = { plan: 'data', build: 'control', plat: 't
 const nextConfig: NextConfig = {
   // Stray lockfiles in parent folders would otherwise make Turbopack treat them as the workspace root.
   turbopack: { root: import.meta.dirname },
+  experimental: { agentUpgrade: 'security' },
   async redirects() {
     return Object.entries(MOVED).flatMap(([from, to]) => [
       { source: `/${from}`, destination: `/system/${to}`, permanent: true },
