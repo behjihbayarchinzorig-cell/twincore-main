@@ -172,7 +172,7 @@ export default function Materials() {
               .sort((a, b) => a.needed.localeCompare(b.needed))
               .map((s) => (
                 <li key={s.id}>
-                  <button type="button" onClick={() => setOpen(s.id)} className="min-h-10 w-full cursor-pointer rounded-xl border border-red-400/30 bg-red-400/[0.04] px-3 py-2.5 text-left text-xs hover:border-red-400/60">
+                  <button type="button" onClick={() => setOpen(s.id)} className="min-h-10 w-full cursor-pointer rounded-xl border border-red-400/30 bg-red-500/[0.04] px-3 py-2.5 text-left text-xs hover:border-red-400/60">
                     <span className="flex items-start justify-between gap-2">
                       <span className="text-fg/90">
                         <span className="font-mono text-mute">{s.id}</span> {s.material}
@@ -180,7 +180,7 @@ export default function Materials() {
                       <Pill tone={stateTone(s.state)}>{w.state[s.state]}</Pill>
                     </span>
                     <span className="mt-1 block text-mute">
-                      {s.pkg} · {w.needed}: <span className="font-mono text-red-300">{s.needed}</span> ({needLabel(s)})
+                      {s.pkg} · {w.needed}: <span className="font-mono text-red-700">{s.needed}</span> ({needLabel(s)})
                     </span>
                   </button>
                 </li>
@@ -208,7 +208,7 @@ export default function Materials() {
           {shown.map((s) => {
             const late = urgent(s);
             return (
-              <tr key={s.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-400/[0.04]' : ''}`} onClick={() => setOpen(s.id)}>
+              <tr key={s.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-500/[0.04]' : ''}`} onClick={() => setOpen(s.id)}>
                 <td className="px-2 py-2.5 font-mono text-xs text-mute">{s.submitted}</td>
                 <td className="px-2 py-2.5 font-mono text-xs whitespace-nowrap">
                   <button type="button" className="cursor-pointer underline-offset-2 hover:underline" onClick={() => setOpen(s.id)}>
@@ -225,11 +225,11 @@ export default function Materials() {
                 <td className="px-2 py-2.5 font-mono text-xs text-fg/80">{s.spec}</td>
                 <td className="px-2 py-2.5 font-mono text-xs">{s.pkg}</td>
                 <td className="px-2 py-2.5 text-xs whitespace-nowrap">
-                  <span className={s.sample === 'pending' ? 'text-sky-300' : 'text-fg/80'}>{s.sample === 'provided' ? '✓' : s.sample === 'pending' ? '…' : '—'}</span>
+                  <span className={s.sample === 'pending' ? 'text-amber-700' : 'text-fg/80'}>{s.sample === 'provided' ? '✓' : s.sample === 'pending' ? '…' : '—'}</span>
                   <span className="text-mute"> / </span>
-                  <span className={s.cert ? 'text-fg/80' : 'text-sky-300'}>{s.cert ? '✓' : '✕'}</span>
+                  <span className={s.cert ? 'text-fg/80' : 'text-amber-700'}>{s.cert ? '✓' : '✕'}</span>
                 </td>
-                <td className={`px-2 py-2.5 font-mono text-xs whitespace-nowrap ${late ? 'text-red-300' : 'text-mute'}`}>{s.needed}</td>
+                <td className={`px-2 py-2.5 font-mono text-xs whitespace-nowrap ${late ? 'text-red-700' : 'text-mute'}`}>{s.needed}</td>
                 <td className="px-2 py-2.5">
                   <Pill tone={stateTone(s.state)}>{w.state[s.state]}</Pill>
                 </td>
@@ -340,7 +340,7 @@ function Detail({
         {rows.map(([k, v]) => (
           <div key={k} className="grid grid-cols-[8.5rem_1fr] gap-3 border-b border-line/50 pb-1.5">
             <dt className="text-mute">{k}</dt>
-            <dd className={`break-words ${k === w.cert && !s.cert ? 'text-sky-300' : 'text-fg/90'}`}>{v}</dd>
+            <dd className={`break-words ${k === w.cert && !s.cert ? 'text-amber-700' : 'text-fg/90'}`}>{v}</dd>
           </div>
         ))}
       </dl>

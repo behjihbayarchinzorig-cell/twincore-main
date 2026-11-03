@@ -41,7 +41,7 @@ export default function TabBar() {
     <>
       {menu && (
         <div className="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true" aria-label={tp('label')}>
-          <div className="absolute inset-0 bg-ink/70 backdrop-blur-sm" onClick={() => setMenu(false)} />
+          <div className="absolute inset-0 bg-navy/40" onClick={() => setMenu(false)} />
           <div className="animate-fade-in absolute inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] flex max-h-[80svh] flex-col rounded-t-3xl border-t border-line bg-ink shadow-[0_-20px_60px_-20px_rgba(37,99,235,0.35)]">
             {/* the handle, the title, a round close button */}
             <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line" aria-hidden="true" />

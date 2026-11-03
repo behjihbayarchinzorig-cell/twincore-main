@@ -475,7 +475,7 @@ export default function Workflow() {
               className={`inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border px-4 text-sm transition ${proc === p ? 'border-accent/60 bg-accent/[0.1] text-fg' : 'border-line text-fg/80 hover:border-mute'}`}
             >
               {w.proc[p].name}
-              {!!wt && <span className="rounded-full bg-sky-400/20 px-1.5 font-mono text-[11px] text-sky-300">{wt}</span>}
+              {!!wt && <span className="rounded-full bg-amber-500/20 px-1.5 font-mono text-[11px] text-amber-700">{wt}</span>}
             </button>
           );
         })}

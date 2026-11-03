@@ -157,7 +157,7 @@ export default function Quality() {
                     <td className="px-2 py-2 text-xs">
                       <ul className="space-y-0.5">
                         {i.checklist.map((c) => (
-                          <li key={c.item} className={c.ok ? 'text-fg/80' : 'text-red-300'}>
+                          <li key={c.item} className={c.ok ? 'text-fg/80' : 'text-red-700'}>
                             {c.ok ? '✓' : '✕'} {c.item}
                           </li>
                         ))}
@@ -281,8 +281,8 @@ function IssueTable<R extends { id: string; due: string; state: IssueState }>({
           const late = overdueIssue(r.due, r.state, now);
           const [title, a, b, c] = cells(r);
           return (
-            <tr key={r.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-400/[0.04]' : ''}`} onClick={() => onOpen(r.id)}>
-              <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-300' : 'text-mute'}`}>{r.due}</td>
+            <tr key={r.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-500/[0.04]' : ''}`} onClick={() => onOpen(r.id)}>
+              <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-700' : 'text-mute'}`}>{r.due}</td>
               <td className="px-2 py-2 font-mono text-xs">
                 <button type="button" className="cursor-pointer underline-offset-2 hover:underline" onClick={() => onOpen(r.id)}>
                   {r.id}

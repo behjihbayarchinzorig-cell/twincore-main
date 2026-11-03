@@ -197,7 +197,7 @@ export default function Docs() {
                       const on = s === doc.state;
                       return (
                         <li key={s} className="flex items-center gap-1">
-                          <span className={`rounded-full border px-2.5 py-1 ${on ? 'border-accent bg-accent/15 text-fg' : k < at ? 'border-emerald-400/40 text-emerald-300' : 'border-line text-mute'}`}>{t.docState[s]}</span>
+                          <span className={`rounded-full border px-2.5 py-1 ${on ? 'border-accent bg-accent/15 text-fg' : k < at ? 'border-emerald-400/40 text-emerald-700' : 'border-line text-mute'}`}>{t.docState[s]}</span>
                           {k < FLOW.length - 1 && <span className="text-mute">→</span>}
                         </li>
                       );
@@ -290,7 +290,7 @@ function UploadForm({ base, onDone }: { base: string | null; onDone: (id: string
 
   return (
     <div className="space-y-4">
-      <p className="rounded-lg border border-sky-400/40 bg-sky-400/[0.07] px-3 py-2 text-xs text-sky-200">{w.noServer}</p>
+      <p className="rounded-lg border border-amber-500/40 bg-amber-500/[0.07] px-3 py-2 text-xs text-amber-700">{w.noServer}</p>
       <Field label={w.title}>
         <input className={inputCls} value={title} onChange={(e) => setTitle(e.target.value)} />
       </Field>

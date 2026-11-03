@@ -258,7 +258,7 @@ export default function Safety() {
           {shown.map((r) => {
             const late = overdueIssue(r.due, r.state, now);
             return (
-              <tr key={r.id} className={`cursor-pointer align-top hover:bg-surface/60 ${late ? 'bg-red-400/[0.04]' : ''}`} onClick={() => setOpen(r.id)}>
+              <tr key={r.id} className={`cursor-pointer align-top hover:bg-surface/60 ${late ? 'bg-red-500/[0.04]' : ''}`} onClick={() => setOpen(r.id)}>
                 <td className="px-2 py-2 font-mono text-xs text-mute">{r.date}</td>
                 <td className="px-2 py-2 font-mono text-xs">
                   <button type="button" className="min-h-8 cursor-pointer underline-offset-2 hover:underline" onClick={() => setOpen(r.id)}>
@@ -280,7 +280,7 @@ export default function Safety() {
                   <Pill tone={toneOf(r.severity)}>{t.severity[r.severity]}</Pill>
                 </td>
                 <td className="px-2 py-2 text-xs">{name(r.owner)}</td>
-                <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-300' : 'text-mute'}`}>{r.due}</td>
+                <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-700' : 'text-mute'}`}>{r.due}</td>
                 <td className="px-2 py-2">
                   <span className="flex flex-wrap gap-1">
                     <Pill tone={toneOf(r.state)}>{t.issueState[r.state]}</Pill>
@@ -311,7 +311,7 @@ export default function Safety() {
                 <td className="px-2 py-2 font-mono text-xs">{h ? h.toLocaleString('en-US') : '—'}</td>
                 <td className="px-2 py-2 font-mono text-xs">{rs.length}</td>
                 <td className="px-2 py-2 font-mono text-xs">{rs.filter((r) => r.state !== 'resolved').length}</td>
-                <td className={`px-2 py-2 font-mono text-xs ${od ? 'text-red-300' : ''}`}>{od}</td>
+                <td className={`px-2 py-2 font-mono text-xs ${od ? 'text-red-700' : ''}`}>{od}</td>
                 <td className="px-2 py-2 font-mono text-xs">{rs.filter((r) => r.kind === 'incident').length}</td>
                 <td className="px-2 py-2 font-mono text-xs">{h ? ((l * 1e6) / h).toFixed(2) : '—'}</td>
                 <td className="px-2 py-2 font-mono text-xs text-mute">{last?.date ?? '—'}</td>

@@ -343,7 +343,7 @@ export default function ProjectInfo() {
         <Panel title={w.milestones} action={<Link href="/construction/schedule" className="text-xs text-accent-hi hover:underline">{w.toSchedule} →</Link>}>
           <Table head={[w.milestone, t.common.package, w.blFinish, w.forecast, w.slip, t.common.status]} empty={!milestones.length}>
             {milestones.map(({ k, a, base, v, state }) => (
-              <tr key={k.id} className={state === 'overdue' ? 'bg-red-400/[0.04]' : ''}>
+              <tr key={k.id} className={state === 'overdue' ? 'bg-red-500/[0.04]' : ''}>
                 <td className="px-2 py-2">
                   {k.name}
                   <p className="text-[11px] text-mute">
@@ -353,7 +353,7 @@ export default function ProjectInfo() {
                 <td className="px-2 py-2 font-mono text-xs text-mute">{a.pkg}</td>
                 <td className="px-2 py-2 font-mono text-xs tabular-nums text-mute">{base ?? '—'}</td>
                 <td className="px-2 py-2 font-mono text-xs tabular-nums">{a.finish}</td>
-                <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(v ?? 0) > 0 ? 'text-sky-300' : 'text-mute'}`}>{v == null ? '—' : `${v > 0 ? '+' : ''}${v}`}</td>
+                <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(v ?? 0) > 0 ? 'text-amber-700' : 'text-mute'}`}>{v == null ? '—' : `${v > 0 ? '+' : ''}${v}`}</td>
                 <td className="px-2 py-2">
                   <Pill tone={state === 'done' ? 'good' : state === 'overdue' ? 'bad' : state === 'soon' ? 'warn' : 'neutral'}>{state === 'overdue' ? t.common.overdue : w[state]}</Pill>
                 </td>

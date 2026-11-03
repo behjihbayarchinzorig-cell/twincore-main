@@ -117,12 +117,12 @@ export default async function ModulePage({ params }: Props) {
           )}
           {/* the monitoring readings are generated, not measured: say so plainly, before anything is shown */}
           {m.slug === 'monitor' && (
-            <div role="note" className="mt-8 flex gap-4 rounded-2xl border border-sky-400/40 bg-sky-400/[0.07] p-5">
-              <span aria-hidden="true" className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sky-400/20 font-mono text-sm text-sky-300">
+            <div role="note" className="mt-8 flex gap-4 rounded-2xl border border-amber-500/40 bg-amber-500/[0.07] p-5">
+              <span aria-hidden="true" className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-amber-500/20 font-mono text-sm text-amber-700">
                 !
               </span>
               <div>
-                <p className="font-medium text-sky-200">{t('system.monitor.sim.title')}</p>
+                <p className="font-medium text-amber-700">{t('system.monitor.sim.title')}</p>
                 <p className="mt-1 max-w-[760px] text-sm leading-relaxed text-fg/80">{t('system.monitor.sim.body')}</p>
               </div>
             </div>
@@ -137,7 +137,7 @@ export default async function ModulePage({ params }: Props) {
               <div className="mb-10 flex flex-wrap items-center justify-between gap-3">
                 <H2>{d.title}</H2>
                 {m.slug === 'monitor' ? (
-                  <span className="rounded-full border border-sky-400/50 bg-sky-400/10 px-3 py-1 text-xs font-medium text-sky-300">{t('system.monitor.sim.badge')}</span>
+                  <span className="rounded-full border border-amber-500/50 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-700">{t('system.monitor.sim.badge')}</span>
                 ) : (
                   <Sample>{t('twin.sample')}</Sample>
                 )}

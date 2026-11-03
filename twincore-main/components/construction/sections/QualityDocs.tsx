@@ -186,10 +186,10 @@ export default function QualityDocs() {
                   <span className="font-mono text-xs text-mute">{p.id}</span> {p.name}
                 </td>
                 <td className="px-2 py-2.5 font-mono text-xs">{c.total}</td>
-                <td className="px-2 py-2.5 font-mono text-xs text-emerald-300">{c.approved}</td>
+                <td className="px-2 py-2.5 font-mono text-xs text-emerald-700">{c.approved}</td>
                 <td className="px-2 py-2.5 font-mono text-xs">{c.review}</td>
-                <td className={`px-2 py-2.5 font-mono text-xs ${c.missing ? 'text-red-300' : 'text-mute'}`}>{c.missing}</td>
-                <td className={`px-2 py-2.5 font-mono text-xs ${c.overdue ? 'text-red-300' : 'text-mute'}`}>{c.overdue}</td>
+                <td className={`px-2 py-2.5 font-mono text-xs ${c.missing ? 'text-red-700' : 'text-mute'}`}>{c.missing}</td>
+                <td className={`px-2 py-2.5 font-mono text-xs ${c.overdue ? 'text-red-700' : 'text-mute'}`}>{c.overdue}</td>
                 <td className="w-28 px-2 py-2.5">
                   <Bar value={c.total ? (c.approved / c.total) * 100 : null} tone={c.missing || c.overdue ? 'warn' : 'good'} label={w.approvedShare} />
                 </td>
@@ -214,8 +214,8 @@ export default function QualityDocs() {
           {shown.map((r) => {
             const late = isOverdue(r);
             return (
-              <tr key={r.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-400/[0.04]' : ''}`} onClick={() => setOpen(r.id)}>
-                <td className={`px-2 py-2.5 font-mono text-xs ${late ? 'text-red-300' : 'text-mute'}`}>{r.due}</td>
+              <tr key={r.id} className={`cursor-pointer hover:bg-surface/60 ${late ? 'bg-red-500/[0.04]' : ''}`} onClick={() => setOpen(r.id)}>
+                <td className={`px-2 py-2.5 font-mono text-xs ${late ? 'text-red-700' : 'text-mute'}`}>{r.due}</td>
                 <td className="px-2 py-2.5 font-mono text-xs">
                   <button type="button" className="cursor-pointer underline-offset-2 hover:underline" onClick={() => setOpen(r.id)}>
                     {r.id}
@@ -322,7 +322,7 @@ function Detail({ r, late, words: w, name, onStep }: { r: Row; late: boolean; wo
             <p className="mt-2 text-mute">{w.checklist}</p>
             <ul className="mt-1 space-y-0.5">
               {insp.checklist.map((c) => (
-                <li key={c.item} className={c.ok ? 'text-fg/80' : 'text-red-300'}>
+                <li key={c.item} className={c.ok ? 'text-fg/80' : 'text-red-700'}>
                   {c.ok ? '✓' : '✕'} {c.item}
                 </li>
               ))}

@@ -222,11 +222,11 @@ export default function Schedule() {
             {w.baseline}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-5 rounded-sm bg-red-400/80" />
+            <span className="h-2 w-5 rounded-sm bg-red-500/80" />
             {t.common.overdue}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-0.5 bg-sky-300" />
+            <span className="h-3 w-0.5 bg-amber-400" />
             {w.todayLine}
           </span>
         </p>
@@ -280,18 +280,18 @@ export default function Schedule() {
                             </span>
                             <span className="relative block h-5">
                               {/* today */}
-                              <span className="absolute inset-y-0 w-px bg-sky-300/80" style={{ left: `${xp(now)}%` }} />
+                              <span className="absolute inset-y-0 w-px bg-amber-400/80" style={{ left: `${xp(now)}%` }} />
                               {/* the baseline: a thin ghost bar underneath */}
                               {b && <span className="absolute bottom-0 h-1 rounded-sm bg-fg/35" style={{ left: `${xp(b.start)}%`, width: `${Math.max(0.4, xp(b.finish) - xp(b.start))}%` }} />}
                               {/* the current bar, filled to its approved progress */}
                               <span
-                                className={`absolute top-0.5 h-3 overflow-hidden rounded-sm ${late ? 'bg-red-400/30 ring-1 ring-red-400/70' : 'bg-accent/25'}`}
+                                className={`absolute top-0.5 h-3 overflow-hidden rounded-sm ${late ? 'bg-red-500/30 ring-1 ring-red-400/70' : 'bg-accent/25'}`}
                                 style={{ left: `${xp(a.start)}%`, width: `${Math.max(0.4, xp(a.finish) - xp(a.start))}%` }}
                               >
-                                <span className={`block h-full ${late ? 'bg-red-400/80' : 'bg-accent/70'}`} style={{ width: `${prog}%` }} />
+                                <span className={`block h-full ${late ? 'bg-red-500/80' : 'bg-accent/70'}`} style={{ width: `${prog}%` }} />
                               </span>
                             </span>
-                            <span className={`text-right font-mono tabular-nums ${v == null ? 'text-mute' : v > 0 ? 'text-sky-300' : v < 0 ? 'text-emerald-300' : 'text-mute'}`}>
+                            <span className={`text-right font-mono tabular-nums ${v == null ? 'text-mute' : v > 0 ? 'text-amber-700' : v < 0 ? 'text-emerald-700' : 'text-mute'}`}>
                               {v == null ? '—' : v === 0 ? '0' : `${v > 0 ? '+' : ''}${v}`}
                             </span>
                           </button>

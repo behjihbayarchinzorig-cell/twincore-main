@@ -142,10 +142,10 @@ type Band = 'low' | 'medium' | 'high' | 'critical';
 const band = (s: number): Band => (s >= 15 ? 'critical' : s >= 10 ? 'high' : s >= 5 ? 'medium' : 'low');
 const BAND_TONE: Record<Band, Tone> = { low: 'good', medium: 'info', high: 'warn', critical: 'bad' };
 const CELL: Record<Band, string> = {
-  low: 'bg-emerald-400/[0.12] border-emerald-400/30',
-  medium: 'bg-sky-400/[0.08] border-sky-400/25',
-  high: 'bg-sky-400/[0.2] border-sky-400/45',
-  critical: 'bg-red-400/[0.2] border-red-400/45',
+  low: 'bg-emerald-600/[0.12] border-emerald-400/30',
+  medium: 'bg-amber-500/[0.08] border-amber-500/25',
+  high: 'bg-amber-500/[0.2] border-amber-500/45',
+  critical: 'bg-red-500/[0.2] border-red-400/45',
 };
 const TREND_ICON: Record<Trend, string> = { up: '↑', flat: '→', down: '↓' };
 const TREND_TONE: Record<Trend, Tone> = { up: 'bad', flat: 'neutral', down: 'good' };
@@ -443,7 +443,7 @@ export default function RiskModel() {
                     </Pill>
                   </td>
                   <td className="px-2 py-2 text-xs text-mute">{name(r.owner)}</td>
-                  <td className={`px-2 py-2 font-mono text-xs tabular-nums ${late(r) ? 'text-red-300' : ''}`}>{r.due || '—'}</td>
+                  <td className={`px-2 py-2 font-mono text-xs tabular-nums ${late(r) ? 'text-red-700' : ''}`}>{r.due || '—'}</td>
                   <td className="px-2 py-2">
                     <Pill tone={r.state === 'open' ? 'warn' : 'good'}>{w.state[r.state]}</Pill>
                   </td>
@@ -480,7 +480,7 @@ export default function RiskModel() {
                         <span className="font-mono text-mute">{r.id}</span> <span className="text-fg/90">{r.title}</span>
                       </span>
                       <span className="shrink-0 font-mono tabular-nums">
-                        {r.p * r.i} → <span className="text-emerald-300">{r.rp * r.ri}</span>
+                        {r.p * r.i} → <span className="text-emerald-700">{r.rp * r.ri}</span>
                       </span>
                     </label>
                   </li>
@@ -494,7 +494,7 @@ export default function RiskModel() {
               <Kpi label={w.reduction} value={nowExp ? `${Math.round(((nowExp - thenExp) / nowExp) * 100)}%` : '—'} tone={thenExp < nowExp ? 'good' : 'neutral'} />
             </div>
             <p className="text-xs text-mute">
-              {w.criticalLeft}: <span className="font-mono text-fg">{critNow}</span> → <span className={`font-mono ${critThen ? 'text-red-300' : 'text-emerald-300'}`}>{critThen}</span>
+              {w.criticalLeft}: <span className="font-mono text-fg">{critNow}</span> → <span className={`font-mono ${critThen ? 'text-red-700' : 'text-emerald-700'}`}>{critThen}</span>
             </p>
             <Bars
               unit={w.byCat}
@@ -516,7 +516,7 @@ export default function RiskModel() {
                       <span className="min-w-0 truncate text-fg/85">
                         {r.id} · {r.mitigation}
                       </span>
-                      <span className="shrink-0 font-mono text-emerald-300">−{gain}</span>
+                      <span className="shrink-0 font-mono text-emerald-700">−{gain}</span>
                     </li>
                   ))}
                 </ol>
@@ -560,7 +560,7 @@ export default function RiskModel() {
               </div>
               <div className="rounded-xl border border-line p-3">
                 <p className="text-xs text-mute">{w.residual}</p>
-                <p className="mt-1 font-mono text-xl text-emerald-300">{cur.rp * cur.ri}</p>
+                <p className="mt-1 font-mono text-xl text-emerald-700">{cur.rp * cur.ri}</p>
                 <p className="text-xs text-mute">
                   {w.p} {cur.rp} × {w.i} {cur.ri}
                 </p>
@@ -698,9 +698,9 @@ export default function RiskModel() {
               {levelSel(w.rp, form.rp, (n) => setForm({ ...form, rp: n }))}
               {levelSel(w.ri, form.ri, (n) => setForm({ ...form, ri: n }))}
             </div>
-            {fieldErr && <p className="text-xs text-red-300">{fieldErr}</p>}
+            {fieldErr && <p className="text-xs text-red-700">{fieldErr}</p>}
             <p className="text-xs text-mute">
-              {w.score}: <span className="font-mono text-fg">{form.p * form.i}</span> → {w.residual}: <span className="font-mono text-emerald-300">{form.rp * form.ri}</span>
+              {w.score}: <span className="font-mono text-fg">{form.p * form.i}</span> → {w.residual}: <span className="font-mono text-emerald-700">{form.rp * form.ri}</span>
             </p>
             <div className="grid grid-cols-2 gap-3">
               <Field label={t.common.owner}>

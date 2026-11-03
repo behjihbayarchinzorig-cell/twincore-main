@@ -167,7 +167,7 @@ function Stepper({ p, labels }: { p: Permit; labels: string[] }) {
         const bad = i === 2 && (p.status === 'rejected' || p.status === 'expired');
         return (
           <li key={i} className="flex items-center gap-2">
-            <span className={`grid h-5 w-5 place-items-center rounded-full border font-mono ${bad ? 'border-red-400/60 text-red-300' : done ? 'border-accent bg-accent/20 text-accent-hi' : 'border-line text-mute'}`}>{i + 1}</span>
+            <span className={`grid h-5 w-5 place-items-center rounded-full border font-mono ${bad ? 'border-red-400/60 text-red-700' : done ? 'border-accent bg-accent/20 text-accent-hi' : 'border-line text-mute'}`}>{i + 1}</span>
             <span className={done ? 'text-fg/90' : 'text-mute'}>{l}</span>
             {i < 2 && <span className="h-px w-5 bg-line" />}
           </li>

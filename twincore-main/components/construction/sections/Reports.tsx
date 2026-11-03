@@ -195,7 +195,7 @@ export default function Reports() {
           🖨 {w.print}
         </Btn>
       </div>
-      {badRange && <p className="text-sm text-red-300">{t.problem.dateOrder}</p>}
+      {badRange && <p className="text-sm text-red-700">{t.problem.dateOrder}</p>}
 
       <Panel
         title={

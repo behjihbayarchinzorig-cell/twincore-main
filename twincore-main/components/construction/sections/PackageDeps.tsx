@@ -274,7 +274,7 @@ export default function PackageDeps() {
                 <td className="px-2 py-2">{p ? <Pill tone={TONE[p.state]}>{w[p.state]}</Pill> : <Pill>{t.common.unavailable}</Pill>}</td>
                 <td className="px-2 py-2 text-right">
                   {can('schedule.edit') && (
-                    <button type="button" onClick={() => removeIf(r)} className="min-h-10 cursor-pointer rounded px-2 text-xs text-red-300 hover:underline">
+                    <button type="button" onClick={() => removeIf(r)} className="min-h-10 cursor-pointer rounded px-2 text-xs text-red-700 hover:underline">
                       {w.remove}
                     </button>
                   )}
@@ -389,7 +389,7 @@ function Network({ data, pkgIds, links, depth, sel, onPick, onLink, words: w }: 
 }
 
 function Matrix({ pkgIds, links, sel, onLink }: { pkgIds: string[]; links: Link_[]; sel: string | null; onLink: (k: string) => void }) {
-  const cell: Record<Tone, string> = { bad: 'bg-red-400/20 text-red-200', warn: 'bg-sky-400/15 text-sky-200', info: 'bg-accent/15 text-accent-hi', good: 'bg-emerald-400/15 text-emerald-200', neutral: '' };
+  const cell: Record<Tone, string> = { bad: 'bg-red-500/20 text-red-700', warn: 'bg-amber-500/15 text-amber-700', info: 'bg-accent/15 text-accent-hi', good: 'bg-emerald-600/15 text-emerald-700', neutral: '' };
   return (
     <div className="-mx-1 overflow-x-auto">
       <table className="w-full min-w-[420px] border-collapse text-xs">
@@ -570,7 +570,7 @@ function NewLink({ words: w, register, onSave, onCancel }: { words: Words; regis
       <Field label={w.note} error={problems.some((p) => p.field === 'note') ? t.problem.required : undefined}>
         <textarea className={`${inputCls} h-20 py-1.5`} value={f.note} onChange={(e) => setF({ ...f, note: e.target.value })} />
       </Field>
-      {msg && <p className="rounded-lg border border-red-400/40 bg-red-400/[0.07] px-3 py-2 text-xs text-red-200">• {msg}</p>}
+      {msg && <p className="rounded-lg border border-red-400/40 bg-red-500/[0.07] px-3 py-2 text-xs text-red-700">• {msg}</p>}
       <Problems list={problems.filter((p) => p.field !== 'note')} />
       <div className="flex gap-2">
         <Btn kind="primary" type="submit">

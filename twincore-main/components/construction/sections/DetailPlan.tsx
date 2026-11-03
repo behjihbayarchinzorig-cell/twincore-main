@@ -387,7 +387,7 @@ export default function DetailPlan() {
               const cs = checks(p);
               const cell = (k: Check['key'], text: string) => {
                 const c = cs.find((x) => x.key === k);
-                const cls = c?.verdict === 'fail' ? 'text-red-300' : c?.verdict === 'warn' ? 'text-sky-300' : '';
+                const cls = c?.verdict === 'fail' ? 'text-red-700' : c?.verdict === 'warn' ? 'text-amber-700' : '';
                 return <td className={`px-2 py-2 font-mono text-xs ${cls}`} title={c ? `${w.limit}: ${fmt(c.limit)}` : undefined}>{text}</td>;
               };
               const v = verdict(p);

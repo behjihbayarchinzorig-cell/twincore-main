@@ -40,7 +40,7 @@ export default function AccountButton({ initial }: { initial: { user: Viewer; de
       <Link
         href="/login"
         aria-busy={isLoading}
-        className="bg-grad inline-flex h-9 items-center rounded-full px-4 text-sm font-medium text-white transition hover:brightness-110"
+        className="bg-grad inline-flex h-9 items-center rounded-md px-3.5 text-sm font-medium text-white transition-colors hover:bg-accent-deep"
       >
         {t('login')}
       </Link>
@@ -63,14 +63,14 @@ export default function AccountButton({ initial }: { initial: { user: Viewer; de
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label={t('account')}
-        className="bg-grad grid h-9 w-9 cursor-pointer place-items-center rounded-full text-sm font-medium text-white uppercase transition hover:brightness-110"
+        className="grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-navy text-sm font-medium text-white uppercase transition-colors hover:bg-accent-deep"
       >
         {label.charAt(0) || '·'}
       </button>
       {open && (
         <div
           role="menu"
-          className="animate-fade-in absolute right-0 mt-2 w-64 rounded-2xl border border-line bg-ink p-2 shadow-[0_20px_60px_-20px_rgba(37,99,235,0.35)]"
+          className="animate-fade-in absolute right-0 mt-2 w-64 rounded-lg border border-line bg-surface p-1.5 shadow-[var(--shadow-pop)]"
         >
           <div className="px-3 py-2.5">
             <p className="truncate text-sm text-fg">{user?.name}</p>
@@ -78,11 +78,11 @@ export default function AccountButton({ initial }: { initial: { user: Viewer; de
             {user?.company && <p className="truncate text-xs text-mute">{user.company}</p>}
           </div>
           <div className="my-1 border-t border-line" />
-          <Link role="menuitem" href="/construction" className="block rounded-lg px-3 py-2 text-sm text-fg/90 hover:bg-surface">
+          <Link role="menuitem" href="/construction" className="block rounded-md px-3 py-2 text-sm text-fg/90 hover:bg-raised">
             {t('workspace')}
           </Link>
           {dev && (
-            <Link role="menuitem" href="/dev" className="block rounded-lg px-3 py-2 text-sm text-fg/90 hover:bg-surface">
+            <Link role="menuitem" href="/dev" className="block rounded-md px-3 py-2 text-sm text-fg/90 hover:bg-raised">
               {t('dev')}
             </Link>
           )}
@@ -91,7 +91,7 @@ export default function AccountButton({ initial }: { initial: { user: Viewer; de
             role="menuitem"
             type="button"
             onClick={out}
-            className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-300 hover:bg-red-500/10"
+            className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
           >
             <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />

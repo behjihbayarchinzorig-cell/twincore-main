@@ -273,7 +273,7 @@ export default function Finance() {
                     {ms.contract} · {contractOf(ms.contract)?.title}
                   </td>
                   <td className="px-2 py-2">{ms.name}</td>
-                  <td className={`px-2 py-2 font-mono text-xs tabular-nums ${late ? 'text-red-300' : ''}`}>{ms.due}</td>
+                  <td className={`px-2 py-2 font-mono text-xs tabular-nums ${late ? 'text-red-700' : ''}`}>{ms.due}</td>
                   <td className="px-2 py-2 font-mono text-xs tabular-nums">{tug(ms.amount, en)}</td>
                   <td className="space-x-1 px-2 py-2">
                     {st ? <Pill tone={toneOf(st)}>{t.invoiceState[st]}</Pill> : <Pill>{t.common.unavailable}</Pill>}

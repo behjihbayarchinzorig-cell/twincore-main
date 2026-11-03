@@ -262,11 +262,11 @@ export default function PackageProgress() {
                     </p>
                     <p className="mt-2 text-[11px] text-mute">{w.blockers}</p>
                     <ul className="mt-1 space-y-0.5 text-xs">
-                      {r.overdue > 0 && <li className="text-red-300">• {w.overdue}: {r.overdue}</li>}
-                      {openNc > 0 && <li className="text-sky-300">• {w.openNc}: {openNc}</li>}
-                      {instr > 0 && <li className="text-sky-300">• {w.instr}: {instr}</li>}
+                      {r.overdue > 0 && <li className="text-red-700">• {w.overdue}: {r.overdue}</li>}
+                      {openNc > 0 && <li className="text-amber-700">• {w.openNc}: {openNc}</li>}
+                      {instr > 0 && <li className="text-amber-700">• {w.instr}: {instr}</li>}
                       {pending > 0 && <li className="text-accent-hi">• {w.pending}: {pending}</li>}
-                      {fin && r.fin != null && r.fin > r.approved + 10 && <li className="text-sky-300">• {w.finAhead}</li>}
+                      {fin && r.fin != null && r.fin > r.approved + 10 && <li className="text-amber-700">• {w.finAhead}</li>}
                       {!r.overdue && !openNc && !instr && !pending && <li className="text-mute">—</li>}
                     </ul>
                   </button>
@@ -300,9 +300,9 @@ export default function PackageProgress() {
                 </div>
                 <Bar value={r.approved} planned={r.planned} tone={r.pts < -5 ? 'warn' : r.approved >= 100 ? 'good' : 'info'} label={r.id} />
               </td>
-              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${r.pts < -5 ? 'text-red-300' : r.pts < 0 ? 'text-sky-300' : 'text-emerald-300'}`}>{signed(r.pts, 1)}</td>
-              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(r.lagDays ?? 0) > 30 ? 'text-red-300' : (r.lagDays ?? 0) > 0 ? 'text-sky-300' : 'text-mute'}`}>{r.lagDays == null ? '—' : signed(r.lagDays)}</td>
-              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(r.shift ?? 0) > 0 ? 'text-sky-300' : 'text-mute'}`}>{r.shift == null ? '—' : `${signed(r.shift)} ${w.days}`}</td>
+              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${r.pts < -5 ? 'text-red-700' : r.pts < 0 ? 'text-amber-700' : 'text-emerald-700'}`}>{signed(r.pts, 1)}</td>
+              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(r.lagDays ?? 0) > 30 ? 'text-red-700' : (r.lagDays ?? 0) > 0 ? 'text-amber-700' : 'text-mute'}`}>{r.lagDays == null ? '—' : signed(r.lagDays)}</td>
+              <td className={`px-2 py-2 font-mono text-xs tabular-nums ${(r.shift ?? 0) > 0 ? 'text-amber-700' : 'text-mute'}`}>{r.shift == null ? '—' : `${signed(r.shift)} ${w.days}`}</td>
               <td className="w-32 px-2 py-2">
                 {!fin ? (
                   <span className="text-xs">🔒</span>
@@ -310,7 +310,7 @@ export default function PackageProgress() {
                   <span className="text-xs text-mute">—</span>
                 ) : (
                   <>
-                    <div className={`mb-1 font-mono text-xs tabular-nums ${r.fin > r.approved + 10 ? 'text-sky-300' : ''}`}>{pct(r.fin)}</div>
+                    <div className={`mb-1 font-mono text-xs tabular-nums ${r.fin > r.approved + 10 ? 'text-amber-700' : ''}`}>{pct(r.fin)}</div>
                     <Bar value={r.fin} planned={r.approved} tone={r.fin > r.approved + 10 ? 'warn' : 'neutral'} label={`${r.id} ${w.fin}`} />
                   </>
                 )}

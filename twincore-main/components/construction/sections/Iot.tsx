@@ -143,11 +143,11 @@ export default function Iot() {
     <div className="space-y-6">
       <PageHead title={t.section.iot} lead={w.lead} />
 
-      <div role="note" className="rounded-2xl border border-sky-400/40 bg-sky-400/[0.07] px-4 py-3">
-        <p className="font-medium text-sky-200">{w.sim}</p>
+      <div role="note" className="rounded-2xl border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
+        <p className="font-medium text-amber-700">{w.sim}</p>
         <p className="mt-1 text-sm text-fg/80">{w.simBody}</p>
         <details className="mt-2 text-sm">
-          <summary className="cursor-pointer text-xs text-sky-300">{w.boundary}</summary>
+          <summary className="cursor-pointer text-xs text-amber-700">{w.boundary}</summary>
           <p className="mt-1 text-xs text-fg/75">{w.boundaryBody}</p>
           <pre className="mt-2 overflow-x-auto rounded-lg border border-line bg-ink p-2 font-mono text-[11px] text-mute">{`{ "sensor": "CR-01", "time": "2026-10-16T09:42:00+08:00", "value": 71.4, "unit": "%" }`}</pre>
         </details>
@@ -183,7 +183,7 @@ export default function Iot() {
                 </td>
                 <td className="px-2 py-2 font-mono text-xs text-mute">
                   {s.warn} / {s.alarm} {s.unit}
-                  {limits[s.id] && <span className="ml-1 text-sky-300">*</span>}
+                  {limits[s.id] && <span className="ml-1 text-amber-700">*</span>}
                 </td>
                 <td className="px-2 py-2">
                   <Pill tone={LV_TONE[lv]}>{w.lv[lv]}</Pill>

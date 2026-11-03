@@ -135,14 +135,14 @@ export default function Land() {
               <tr key={p.id} className="cursor-pointer align-top hover:bg-surface/60" onClick={() => setOpen(p.id)}>
                 <td className="px-2 py-2 font-mono text-xs">
                   {p.id}
-                  {!p.geom && <span className="mt-0.5 block font-sans text-[11px] text-sky-300">{t.common.noGeom}</span>}
+                  {!p.geom && <span className="mt-0.5 block font-sans text-[11px] text-amber-700">{t.common.noGeom}</span>}
                 </td>
                 <td className="px-2 py-2">
                   <Pill tone={toneOf(p.status)}>{t.parcelStatus[p.status]}</Pill>
                 </td>
                 <td className="px-2 py-2 text-xs">{orgName(p.responsible)}</td>
                 <td className="px-2 py-2 font-mono text-xs text-mute">{p.started}</td>
-                <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-300' : 'text-mute'}`}>{p.target}</td>
+                <td className={`px-2 py-2 font-mono text-xs ${late ? 'text-red-700' : 'text-mute'}`}>{p.target}</td>
                 <td className="px-2 py-2 font-mono text-xs text-mute">{p.done ?? '—'}</td>
                 <td className="px-2 py-2 text-xs">{late ? <Pill tone="bad">{`${late} ${t.common.days}`}</Pill> : '—'}</td>
                 <td className="px-2 py-2 text-xs">{p.docs.length ? p.docs.map((d) => <span key={d} className="block">{docTitle(d)}</span>) : '—'}</td>

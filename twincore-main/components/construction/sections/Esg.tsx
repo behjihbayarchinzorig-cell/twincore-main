@@ -161,7 +161,7 @@ export default function Esg() {
         }
       >
         <p className="mb-3 text-xs text-mute">{w.methodNote}</p>
-        <p className="mb-3 text-xs text-sky-300">{w.simNote}</p>
+        <p className="mb-3 text-xs text-amber-700">{w.simNote}</p>
         <Table head={[w.name, w.unit, w.period, w.source, w.method, w.baseline, w.current, w.change, w.better]} empty={!inds.length}>
           {inds.map((i) => {
             const delta = i.baseline != null && i.current != null ? i.current - i.baseline : null;
@@ -183,13 +183,13 @@ export default function Esg() {
                 <td className="px-2 py-2 font-mono tabular-nums">{fmtNum(i.baseline)}</td>
                 <td className="px-2 py-2 font-mono tabular-nums">
                   {fmtNum(i.current)}
-                  {i.method === 'estimated' && i.current != null && <span className="ml-1 text-xs text-sky-300">({w.estNote})</span>}
+                  {i.method === 'estimated' && i.current != null && <span className="ml-1 text-xs text-amber-700">({w.estNote})</span>}
                 </td>
                 <td className="px-2 py-2 font-mono text-xs tabular-nums">
                   {delta == null ? (
                     <span className="text-mute">—</span>
                   ) : (
-                    <span className={good ? 'text-emerald-300' : 'text-red-300'}>
+                    <span className={good ? 'text-emerald-700' : 'text-red-700'}>
                       {delta > 0 ? '+' : ''}
                       {Number(delta.toFixed(2)).toLocaleString('en-US')}
                     </span>

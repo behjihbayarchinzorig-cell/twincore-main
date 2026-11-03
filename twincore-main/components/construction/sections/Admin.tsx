@@ -163,8 +163,8 @@ export default function Admin() {
     <div className="space-y-6">
       <PageHead title={t.section.admin} lead={w.lead} />
 
-      <div role="note" className="rounded-2xl border border-red-400/40 bg-red-400/[0.07] px-4 py-3">
-        <p className="font-medium text-red-200">🔒 {w.secTitle}</p>
+      <div role="note" className="rounded-2xl border border-red-400/40 bg-red-500/[0.07] px-4 py-3">
+        <p className="font-medium text-red-700">🔒 {w.secTitle}</p>
         <p className="mt-1 text-sm text-fg/80">{w.secBody}</p>
       </div>
 
@@ -229,7 +229,7 @@ export default function Admin() {
                   </th>
                   {ROLES.map((r) => (
                     <td key={r} className="px-2 py-1.5 text-center">
-                      {allowed(r, a) ? <span className="text-emerald-300" aria-label="✓">✓</span> : <span className="text-mute" aria-label="—">—</span>}
+                      {allowed(r, a) ? <span className="text-emerald-700" aria-label="✓">✓</span> : <span className="text-mute" aria-label="—">—</span>}
                     </td>
                   ))}
                 </tr>

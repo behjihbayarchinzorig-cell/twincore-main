@@ -137,7 +137,7 @@ export default function DevPanel() {
                   </td>
                   <td className="px-4 py-3">
                     <span className="inline-flex items-center gap-2 tabular-nums">
-                      <span className={`h-2 w-2 rounded-full ${r.activeSessions ? 'bg-emerald-400' : 'bg-mute/40'}`} />
+                      <span className={`h-2 w-2 rounded-full ${r.activeSessions ? 'bg-emerald-600' : 'bg-mute/40'}`} />
                       {r.activeSessions}
                     </span>
                   </td>

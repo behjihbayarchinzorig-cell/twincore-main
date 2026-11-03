@@ -1,48 +1,71 @@
 @import 'tailwindcss';
 
-/* Palette: deep navy surfaces; blue accents running from sky blue (#60a5fa) to deep blue (#1e40af) */
-@theme inline {
-  --color-ink: #060b18;
-  --color-surface: #0d1628;
-  --color-raised: #1a2a47;
-  --color-line: #1e2d4a;
-  --color-fg: #eaf1ff;
-  --color-mute: #8ea6cc;
-  --color-accent-soft: #93c5fd;
-  --color-accent-hi: #60a5fa;
-  --color-accent: #3b82f6;
-  --color-accent-deep: #1e40af;
-  /* Roboto for everything; "mono" is a small-label style with tabular figures, not a separate face */
-  --font-display: var(--font-roboto), system-ui, sans-serif;
-  --font-sans: var(--font-roboto), system-ui, sans-serif;
-  --font-mono: var(--font-roboto), system-ui, sans-serif;
+/* TwinCore design tokens.
+   Light engineering surfaces: cool grey page, white panels, slate ink, one teal accent. Status colours are used only
+   for status (good / warning / critical), never for decoration. The names are kept from the earlier dark theme so every
+   component re-themes from here: ink = page, surface = panel, raised = hover / inset, line = border, fg = text,
+   mute = secondary text. Not `inline`, so a region can swap the values (see .tc-dark). */
+@theme {
+  --color-ink: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-raised: #eef2f6;
+  --color-line: #dde3ea;
+  --color-fg: #17212f;
+  --color-mute: #586577;
+  --color-accent-soft: #115e59;
+  --color-accent-hi: #0f766e;
+  --color-accent: #0d9488;
+  --color-accent-deep: #134e4a;
+  --color-navy: #172334;
+  --color-ok: #15803d;
+  --color-warn: #b45309;
+  --color-bad: #b91c1c;
+  /* Inter for everything (it carries Cyrillic); "mono" is a label style with tabular figures, not a separate face */
+  --font-display: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-inter), system-ui, sans-serif;
+  --radius-panel: 10px;
+  --shadow-panel: 0 1px 2px rgb(23 33 47 / 0.04), 0 1px 1px rgb(23 33 47 / 0.03);
+  --shadow-pop: 0 12px 32px -12px rgb(23 33 47 / 0.22), 0 2px 6px rgb(23 33 47 / 0.06);
+}
+
+/* Dark surfaces (the workspace sidebar, the footer, 3D and map viewports): the same names, navy values. */
+.tc-dark {
+  --color-ink: #172334;
+  --color-surface: #1d2b3f;
+  --color-raised: #24354c;
+  --color-line: #2e4058;
+  --color-fg: #e9eef4;
+  --color-mute: #9badc2;
+  --color-accent-soft: #99f6e4;
+  --color-accent-hi: #5eead4;
+  --color-accent: #2dd4bf;
+  --color-accent-deep: #14b8a6;
+  color: var(--color-fg);
+  color-scheme: dark;
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-tap-highlight-color: transparent;
   }
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply text-fg font-sans text-base leading-[1.6] antialiased;
-    /* a soft blue glow at the top of the page, deepening into navy */
-    background:
-      radial-gradient(1100px 520px at 50% -160px, rgb(37 99 235 / 0.22), transparent 70%),
-      var(--color-ink);
+    @apply bg-ink text-fg font-sans text-[15px] leading-[1.6] antialiased;
+    font-feature-settings: 'cv11', 'ss01';
   }
   h1, h2, h3 {
-    @apply font-display font-medium tracking-[-0.025em];
+    @apply font-display font-semibold tracking-[-0.02em];
   }
   .font-mono {
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.01em;
   }
   ::selection {
-    background: var(--color-accent);
-    color: #fff;
+    background: rgb(13 148 136 / 0.2);
   }
   :focus-visible {
     outline: 2px solid var(--color-accent);
@@ -110,8 +133,8 @@
   to { background-position: -50% 0; }
 }
 @utility shimmer {
-  background-color: #0a1222;
-  background-image: linear-gradient(100deg, transparent 30%, rgb(96 165 250 / 0.07) 50%, transparent 70%);
+  background-color: var(--color-raised);
+  background-image: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.6) 50%, transparent 70%);
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
 }
@@ -144,10 +167,10 @@
   .animate-fill { animation: none; transform: scaleX(1); }
 }
 
-/* Soft pulsing glow on the paused play button */
+/* A quiet ring on the paused play button */
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(255 94 70 / 0.45); }
-  50% { box-shadow: 0 0 14px 3px rgb(255 94 70 / 0.4); }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(13 148 136 / 0.35); }
+  50% { box-shadow: 0 0 0 4px rgb(13 148 136 / 0.15); }
 }
 @utility animate-glow {
   animation: glow 2.4s ease-in-out infinite;
@@ -182,37 +205,36 @@
   }
 }
 
-/* A slim scrollbar in the site's blue, for side lists that scroll on their own (the workspace menu) */
+/* A slim scrollbar in the site's colours, for side lists that scroll on their own (the workspace menu) */
 @utility thin-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgb(59 130 246 / 0.55) transparent;
+  scrollbar-color: color-mix(in oklab, var(--color-mute) 45%, transparent) transparent;
   &::-webkit-scrollbar {
     width: 6px;
   }
   &::-webkit-scrollbar-track {
-    background: rgb(30 45 74 / 0.5);
-    border-radius: 9999px;
+    background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgb(59 130 246 / 0.55);
+    background: color-mix(in oklab, var(--color-mute) 45%, transparent);
     border-radius: 9999px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgb(96 165 250 / 0.85);
+    background: var(--color-mute);
   }
 }
 
 /* Leaflet map: labels and controls in the site's colours */
 .tc-map .leaflet-container,
 .tc-map.leaflet-container {
-  background: #0a1222;
-  font-family: var(--font-roboto), system-ui, sans-serif;
+  background: #e6eaef;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 .tc-map .tc-tip {
-  background: rgb(33 26 25 / 0.85);
-  border: 1px solid #1e2d4a;
+  background: rgb(255 255 255 / 0.95);
+  border: 1px solid #dde3ea;
   border-radius: 4px;
-  color: #eaf1ff;
+  color: #17212f;
   font-size: 11px;
   padding: 1px 6px;
   box-shadow: none;
@@ -222,17 +244,17 @@
 }
 .tc-map .leaflet-control-zoom a,
 .tc-map .leaflet-control-scale-line {
-  background: rgb(33 26 25 / 0.88);
-  color: #eaf1ff;
-  border-color: #1e2d4a;
+  background: #fff;
+  color: #17212f;
+  border-color: #dde3ea;
 }
 .tc-map .leaflet-control-attribution {
-  background: rgb(33 26 25 / 0.75);
-  color: #8ea6cc;
+  background: rgb(255 255 255 / 0.85);
+  color: #586577;
   font-size: 10px;
 }
 .tc-map .leaflet-control-attribution a {
-  color: #93c5fd;
+  color: #0f766e;
 }
 
 /* Base-data map: each layer's pane fades; utility lines flow; late packages pulse; the picked shape glows */
@@ -266,7 +288,7 @@
 .tc-map .tc-lit {
   stroke-width: 4;
   fill-opacity: 0.5;
-  filter: drop-shadow(0 0 10px rgb(96 165 250 / 0.9));
+  filter: drop-shadow(0 0 4px rgb(13 148 136 / 0.6));
 }
 @media (prefers-reduced-motion: reduce) {
   .tc-map .tc-flow, .tc-map .tc-late { animation: none; }
@@ -345,13 +367,24 @@
   }
 }
 
-/* The important things in blue that deepens: light sky blue into deep blue */
+/* The primary action colour: one solid teal (the old blue gradient's names are kept so every button follows). */
 @utility bg-grad {
-  background-image: linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #1e3a8a 100%);
+  background-color: var(--color-accent-hi);
 }
 @utility text-grad {
-  background-image: linear-gradient(120deg, #93c5fd 0%, #3b82f6 50%, #1d4ed8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--color-accent-hi);
+}
+
+/* A panel: white, a hairline border, almost no shadow. */
+@utility panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+/* Colour and visibility changes inside the story's city ease instead of switching */
+.tc-ease,
+.tc-ease polygon {
+  transition: opacity 0.8s ease, fill 0.8s ease;
 }

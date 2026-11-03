@@ -98,7 +98,7 @@ export default function Infra() {
             <tr key={a.id} className="cursor-pointer align-top hover:bg-surface/60" onClick={() => setOpen(a.id)}>
               <td className="px-2 py-2 font-mono text-xs">
                 {a.id}
-                {!a.geom && <span className="mt-0.5 block font-sans text-[11px] text-sky-300">{t.common.noGeom}</span>}
+                {!a.geom && <span className="mt-0.5 block font-sans text-[11px] text-amber-700">{t.common.noGeom}</span>}
               </td>
               <td className="px-2 py-2">
                 <button type="button" className="cursor-pointer text-left hover:underline" onClick={() => setOpen(a.id)}>

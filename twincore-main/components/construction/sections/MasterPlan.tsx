@@ -337,7 +337,7 @@ export default function MasterPlan() {
               {nets
                 .filter((a) => !a.geom)
                 .map((a) => (
-                  <button key={a.id} type="button" onClick={() => setSelNet(a.id)} className="block min-h-10 w-full cursor-pointer rounded-lg border border-sky-400/40 px-3 py-2 text-left text-sky-200">
+                  <button key={a.id} type="button" onClick={() => setSelNet(a.id)} className="block min-h-10 w-full cursor-pointer rounded-lg border border-amber-500/40 px-3 py-2 text-left text-amber-700">
                     {a.id} · {a.name} — {w.noGeom}
                   </button>
                 ))}
@@ -473,7 +473,7 @@ export default function MasterPlan() {
                   <td className="px-2 py-2 font-mono text-xs">{a.id}</td>
                   <td className="px-2 py-2">
                     {a.name}
-                    {!a.geom && <span className="block text-[11px] text-sky-300">{t.common.noGeom}</span>}
+                    {!a.geom && <span className="block text-[11px] text-amber-700">{t.common.noGeom}</span>}
                   </td>
                   <td className="px-2 py-2 text-xs">
                     <span className="flex items-center gap-1.5">

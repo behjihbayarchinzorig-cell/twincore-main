@@ -150,7 +150,7 @@ const W = {
 
 type Words = typeof W.mn;
 const sd = (n: number) => (n > 0 ? `+${n}` : `${n}`);
-const shiftTone = (n: number) => (n > 0 ? 'text-sky-300' : n < 0 ? 'text-emerald-300' : 'text-mute');
+const shiftTone = (n: number) => (n > 0 ? 'text-amber-700' : n < 0 ? 'text-emerald-700' : 'text-mute');
 const maxDate = (xs: string[]) => xs.reduce((m, d) => (d > m ? d : m), '0000-00-00');
 
 // the activities that drive the package finish: from the latest-finishing activity back through whichever
@@ -439,7 +439,7 @@ export default function ApproveSchedule() {
               <p className="mb-2 text-xs text-mute">{w.effects}</p>
               <ul className="space-y-1.5 text-sm">
                 {c.logic.map((id) => (
-                  <li key={`l-${id}`} className="text-sky-300">
+                  <li key={`l-${id}`} className="text-amber-700">
                     ⚠ {id} {actName(id)} — {w.effLogic}
                   </li>
                 ))}
@@ -449,17 +449,17 @@ export default function ApproveSchedule() {
                   </li>
                 ))}
                 {c.lateAfter.map((r) => (
-                  <li key={`a-${r.a.id}`} className="text-red-300">
+                  <li key={`a-${r.a.id}`} className="text-red-700">
                     • {r.a.id} {r.a.name} — {w.effLate}
                   </li>
                 ))}
                 {c.fixed.map((r) => (
-                  <li key={`f-${r.a.id}`} className="text-emerald-300">
+                  <li key={`f-${r.a.id}`} className="text-emerald-700">
                     • {r.a.id} {r.a.name} — {w.effFixed}
                   </li>
                 ))}
                 {c.milestone && (
-                  <li className="text-sky-300">
+                  <li className="text-amber-700">
                     ⚠ {w.effMilestone} {c.milestone.id} “{c.milestone.name}” ({c.milestone.due}) {w.effMilestoneTail}
                   </li>
                 )}
@@ -547,7 +547,7 @@ export default function ApproveSchedule() {
                 ))}
             </div>
             <Problems list={formProblems.list} />
-            {formProblems.msg && <p className="rounded-lg border border-red-400/40 bg-red-400/[0.07] px-3 py-2 text-xs text-red-200">• {formProblems.msg}</p>}
+            {formProblems.msg && <p className="rounded-lg border border-red-400/40 bg-red-500/[0.07] px-3 py-2 text-xs text-red-700">• {formProblems.msg}</p>}
             <div className="flex gap-2">
               <Btn kind="primary" type="submit">
                 {w.send}
@@ -617,11 +617,11 @@ function MiniGantt({ rows, chain, now, words: w }: { rows: { a: Activity; base: 
           {w.legendProp}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2 w-5 rounded-sm bg-sky-400/80" />
+          <span className="h-2 w-5 rounded-sm bg-amber-500/80" />
           {w.legendLater}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-3 w-0.5 bg-sky-300" />
+          <span className="h-3 w-0.5 bg-amber-400" />
           {w.todayLine}
         </span>
       </p>
@@ -634,10 +634,10 @@ function MiniGantt({ rows, chain, now, words: w }: { rows: { a: Activity; base: 
                 <span className={`truncate ${chain.has(r.a.id) ? 'text-fg' : 'text-fg/70'}`}>{r.a.name}</span>
               </span>
               <span className="relative block h-5">
-                {tx >= 0 && tx <= 100 && <span className="absolute inset-y-0 w-px bg-sky-300/80" style={{ left: `${tx}%` }} />}
+                {tx >= 0 && tx <= 100 && <span className="absolute inset-y-0 w-px bg-amber-400/80" style={{ left: `${tx}%` }} />}
                 <span className="absolute bottom-0 h-1 rounded-sm bg-fg/35" style={{ left: `${xp(r.base.start)}%`, width: `${Math.max(0.5, xp(r.base.finish) - xp(r.base.start))}%` }} />
                 <span
-                  className={`absolute top-0.5 h-3 rounded-sm ${r.dFinish > 0 ? 'bg-sky-400/70' : 'bg-accent/60'} ${chain.has(r.a.id) ? 'ring-1 ring-fg/50' : ''}`}
+                  className={`absolute top-0.5 h-3 rounded-sm ${r.dFinish > 0 ? 'bg-amber-500/70' : 'bg-accent/60'} ${chain.has(r.a.id) ? 'ring-1 ring-fg/50' : ''}`}
                   style={{ left: `${xp(r.prop.start)}%`, width: `${Math.max(0.5, xp(r.prop.finish) - xp(r.prop.start))}%` }}
                 />
               </span>

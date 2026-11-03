@@ -52,7 +52,7 @@ export function LiveSensors() {
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: LEVEL_COLOR[lv] }} />
                 <span>
                   <span className="font-mono text-xs text-mute">{s.id}</span> {t(`kind.${s.kind}`)}
-                  <span className="ml-2 rounded border border-sky-400/40 px-1 font-mono text-[9px] tracking-wider text-sky-300">{t('sim.tag')}</span>
+                  <span className="ml-2 rounded border border-amber-500/40 px-1 font-mono text-[9px] tracking-wider text-amber-700">{t('sim.tag')}</span>
                 </span>
                 <span className="font-mono tabular-nums" style={{ color: lv === 'ok' ? undefined : LEVEL_COLOR[lv] }}>
                   {fmt(s, v)} <span className="text-xs text-mute">{s.unit}</span>
@@ -143,7 +143,7 @@ export function AlertFeed() {
     <ul className="divide-y divide-line/60 rounded-lg border border-line bg-surface" aria-live="polite">
       {live.map(({ s, v, lv }) => (
         <li key={s.id} className="flex gap-4 px-5 py-3 text-sm">
-          <span className="w-20 shrink-0 font-mono text-xs text-sky-300">{t('now')}</span>
+          <span className="w-20 shrink-0 font-mono text-xs text-amber-700">{t('now')}</span>
           <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full" style={{ background: LEVEL_COLOR[lv] }} />
           <span>
             {s.id} · {t(`kind.${s.kind}`)}: {fmt(s, v)} {s.unit} — {t(`level.${lv}`)}

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
-import { Box, C, Clouds, HERO, HERO_H, Hero, LIFT_RISE, LIFT_SET, Park, Parked, Street, Walkers, iso, pts, slabLift, slabSet } from './StoryCity';
+import { Box, C, Clouds, HERO, HERO_H, Hero, LIFT_RISE, LIFT_SET, Park, Parked, SLAB_DROP, Street, Walkers, iso, pts, slabLift, slabSet } from './StoryCity';
 
 // The overview as a short animated story, told in the platform's own words: base data is laid down, the digital twin
 // rises on it, construction is controlled on the twin, the site is monitored — and every object is one record with
@@ -12,6 +12,8 @@ import { Box, C, Clouds, HERO, HERO_H, Hero, LIFT_RISE, LIFT_SET, Park, Parked, 
 
 export type Scene = { name: string; lead: string; points: string[]; href?: string };
 const DUR = 8000;
+const BUILD_DUR = 15000; // the construction scene runs longer, so every lift reads as one calm movement
+const durOf = (k: number) => (k === 2 ? BUILD_DUR : DUR);
 const LIFT = 16; // how far apart the base layers sit, in scene 1 (the stack is lifted so its bottom stays in the picture)
 
 // the block (x, y, w, d, height), one building to a plot, each set a little differently on it. The plots in front of
@@ -26,10 +28,55 @@ const BUILDINGS: [number, number, number, number, number][] = [
   [4.4, 2.45, 1.2, 1.3, 0.35], // parking deck
 ];
 const LIFTS = HERO.floors; // crane lifts in scene 3, one per floor
-// the tower crane's mast: the site's plot is all building, so the crane stands on the corner of the plaza in front
-// of it. In this view that is just left of the building, with only the low school behind it — never inside the
-// building or against a tall neighbour; only the jib reaches over, high above the roof line.
-const CRANE = { x: HERO.x + 0.17, y: HERO.y + HERO.d + 0.57 };
+// The tower crane. The site's plot is all building, so the mast stands on its own footing across the road, in the
+// forecourt of the low retail block: on screen it is well clear of the building, its upper half against open sky
+// rather than a tall neighbour, and it is drawn after the buildings (it is nearer than all of them). Only the long jib
+// reaches over the plot, well above the roof line. The precast slabs wait in a stack in the yard (the plaza in front)
+// and are lifted from there.
+const CRANE = { x: 5.55, y: 1.62 };
+const MAST_TOP = 7.2;
+const MAST_HW = 0.09; // half the mast's width
+const YARD = { x: HERO.x, y: 4.3 }; // the stack's back corner; the slabs are the plot's size
+const polar = (px: number, py: number) => ({ a: Math.atan2(py - CRANE.y, px - CRANE.x), r: Math.hypot(px - CRANE.x, py - CRANE.y) });
+const AT_PLOT = polar(HERO.x + HERO.w / 2, HERO.y + HERO.d / 2);
+const AT_YARD = polar(YARD.x + HERO.w / 2, YARD.y + HERO.d / 2);
+const JIB = Math.max(AT_PLOT.r, AT_YARD.r) + 0.45;
+const DUNNAGE = 0.06; // timber the stack sits on
+const PLATE = 0.08; // one slab's thickness
+const HANG = 0.3; // the hook rides this far above the slab it carries
+const smooth = (k: number) => k * k * (3 - 2 * k);
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const seg = (u: number, a: number, b: number) => smooth(clamp01((u - a) / (b - a)));
+
+// the mast on its footing: two lattice faces, drawn in the buildings' depth order
+function Mast() {
+  const { x, y } = CRANE;
+  const T = MAST_TOP;
+  const n = 14;
+  const face = (ax: number, ay: number, bx: number, by: number, op: number) => (
+    <g opacity={op}>
+      <line x1={iso(ax, ay, 0)[0]} y1={iso(ax, ay, 0)[1]} x2={iso(ax, ay, T)[0]} y2={iso(ax, ay, T)[1]} stroke="#93c5fd" strokeWidth={1.2} />
+      <line x1={iso(bx, by, 0)[0]} y1={iso(bx, by, 0)[1]} x2={iso(bx, by, T)[0]} y2={iso(bx, by, T)[1]} stroke="#93c5fd" strokeWidth={1.2} />
+      {Array.from({ length: n }, (_, k) => {
+        const [p0x, p0y] = k % 2 ? iso(bx, by, (k * T) / n) : iso(ax, ay, (k * T) / n);
+        const [p1x, p1y] = k % 2 ? iso(ax, ay, ((k + 1) * T) / n) : iso(bx, by, ((k + 1) * T) / n);
+        return <line key={k} x1={p0x} y1={p0y} x2={p1x} y2={p1y} stroke="#93c5fd" strokeWidth={0.55} opacity={0.85} />;
+      })}
+    </g>
+  );
+  const h = MAST_HW;
+  return (
+    <g>
+      {/* the footing */}
+      <Box x={x - 0.2} y={y - 0.2} z={0} w={0.4} d={0.4} h={0.07} c={['#7c8aa0', '#5d6b80', '#4a576a']} />
+      {/* the far faces first, faintly, then the near ones */}
+      {face(x - h, y - h, x + h, y - h, 0.45)}
+      {face(x - h, y - h, x - h, y + h, 0.45)}
+      {face(x - h, y + h, x + h, y + h, 1)}
+      {face(x + h, y - h, x + h, y + h, 1)}
+    </g>
+  );
+}
 const SENSORS: [number, number, number, boolean][] = [
   [0.35, 4.45, 3.0, false],
   [2.45, 0.35, 5.0, false],
@@ -132,15 +179,15 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
     return () => io.disconnect();
   }, []);
   // the step's timer: paused while held (or off screen), resumed with the time it had left
-  const left = useRef(DUR);
+  const left = useRef(durOf(0));
   const started = useRef(0);
   useEffect(() => {
-    left.current = DUR;
+    left.current = durOf(i);
   }, [i]);
   useEffect(() => {
     if (!seen || paused) return;
     started.current = performance.now();
-    const id = setTimeout(() => setI((v) => (v + 1) % scenes.length), Math.max(0, left.current));
+    const id = setTimeout(() => !location.search.includes('scene') && setI((v) => (v + 1) % scenes.length), Math.max(0, left.current));
     return () => {
       clearTimeout(id);
       left.current -= performance.now() - started.current;
@@ -156,47 +203,59 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
     const step = (now: number) => {
       const dt = now - last;
       last = now;
-      setT((v) => Math.min(1, v + dt / DUR));
+      if (!location.search.includes('t=')) setT((v) => Math.min(1, v + dt / BUILD_DUR));
       raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
   }, [i, seen, paused]);
 
+  // DEBUG-PIN (temporary)
+  const pin = typeof location !== 'undefined' ? new URLSearchParams(location.search) : null;
+  if (pin?.get('scene')) { const ps = +pin.get('scene')!; if (ps !== i) setTimeout(() => setI(ps)); }
+  if (pin?.get('t') && i === 2) { const pt = +pin.get('t')!; if (pt !== t) setTimeout(() => setT(pt)); }
   const sc = scenes[i];
-  const play = { ['--dur' as string]: `${DUR}ms`, animationPlayState: paused || !seen ? 'paused' : 'running' } as React.CSSProperties;
+  const play = { ['--dur' as string]: `${durOf(i)}ms`, animationPlayState: paused || !seen ? 'paused' : 'running' } as React.CSSProperties;
   const layersIn = true;
   const twin = i >= 1;
   const sensors = i >= 3;
   const ids = i === 4;
-  // the building goes up at a steady pace (no slow crawl at the end): a short pause for the crane to swing in,
-  // the climb, a moment finished. The hook makes one lift per floor, in step with the building (see StoryCity's
-  // LIFT_RISE / LIFT_SET): it comes down with the next slab while the columns rise, lowers the slab onto them, and
-  // goes back up empty.
-  const grow = i < 2 ? 0 : i > 2 ? 1 : Math.min(1, Math.max(0, (t - 0.08) / 0.78));
+  // The building goes up at a steady pace with a moment finished at the end (the crane then leaves). One lift per
+  // floor, in step with the building (see StoryCity's LIFT_RISE / LIFT_SET): while that floor's columns rise the hook
+  // drops to the yard, takes the top slab off the stack, hoists it clear, and the crane slews and runs its trolley in
+  // over the plot; the slab is lowered onto the columns; the empty hook goes up and swings back to the yard.
+  const grow = i < 2 ? 0 : i > 2 ? 1 : clamp01((t - 0.05) / 0.85);
   const floors = HERO.floors;
   const bf = grow * LIFTS;
   const lift = Math.min(LIFTS - 1, Math.floor(bf));
-  const cycle = bf - lift;
-  const ease = (k: number) => k * k * (3 - 2 * k);
-  const HOOK_UP = 6.4;
-  const hang = 0.3; // the hook rides this far above the slab it carries
-  const land = (lift + 1) * HERO.fh + hang; // the hook once the slab is in place
+  const cycle = grow >= 1 ? 1 : bf - lift;
+  const land = (lift + 1) * HERO.fh + HANG; // the hook once the slab is in place
+  const travel = Math.min(MAST_TOP - 0.55, Math.max(3.2, land + SLAB_DROP + 0.8)); // clear of the building and the stack
+  const pick = DUNNAGE + (LIFTS - lift) * PLATE + HANG; // the hook at the top slab of the stack
   const setP = slabSet(bf, lift + 1);
-  const hookZ =
-    grow >= 1
-      ? HOOK_UP
-      : cycle < LIFT_RISE
-        ? HOOK_UP - (HOOK_UP - land - slabLift(0)) * ease(cycle / LIFT_RISE)
-        : cycle < LIFT_RISE + LIFT_SET
-          ? land + slabLift(setP)
-          : land + (HOOK_UP - land) * ease((cycle - LIFT_RISE - LIFT_SET) / (1 - LIFT_RISE - LIFT_SET));
-  // the slab hangs from the hook until it is set down (Hero draws it from then on)
-  const loaded = grow < 1 && cycle < LIFT_RISE;
-  const reach = Math.hypot(HERO.x + HERO.w / 2 - CRANE.x, HERO.y + HERO.d / 2 - CRANE.y); // mast to the plot's centre
-  const trolley = reach; // the hook hangs straight over the plot's centre, so the slab comes down square
+  let hookZ = travel;
+  let swing = 0; // 0 = over the yard, 1 = over the plot
+  let loaded = false;
+  if (grow < 1 && cycle < LIFT_RISE) {
+    const u = cycle / LIFT_RISE;
+    loaded = u >= 0.22;
+    swing = seg(u, 0.5, 0.84);
+    hookZ = u < 0.22 ? travel + (pick - travel) * seg(u, 0, 0.18) : u < 0.5 ? pick + (travel - pick) * seg(u, 0.26, 0.5) : travel + (land + slabLift(0) - travel) * seg(u, 0.84, 1);
+  } else if (grow < 1 && cycle < LIFT_RISE + LIFT_SET) {
+    swing = 1;
+    hookZ = land + slabLift(setP);
+  } else if (grow < 1) {
+    const r = (cycle - LIFT_RISE - LIFT_SET) / (1 - LIFT_RISE - LIFT_SET);
+    hookZ = land + (travel - land) * seg(r, 0, 0.35);
+    swing = 1 - seg(r, 0.35, 1);
+  }
+  const angle = AT_YARD.a + (AT_PLOT.a - AT_YARD.a) * swing;
+  const trolley = AT_YARD.r + (AT_PLOT.r - AT_YARD.r) * swing;
+  // the slabs still waiting in the yard (the one on the hook has left the stack)
+  const waiting = grow >= 1 ? 0 : LIFTS - lift - (loaded || cycle >= LIFT_RISE ? 1 : 0);
   const open = grow >= 1; // the building is finished: its rooms fill, the roof comes alive and the crane leaves
   const crane = i === 2 && !open;
+  const yard = i === 2;
 
   return (
     <div ref={box} className={compact ? 'flex flex-col gap-4' : 'grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14'}>
@@ -330,14 +389,20 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
           <g style={{ transition: 'opacity 700ms' }} opacity={twin ? 1 : 0}>
             <Clouds still={still} />
             <Park still={still} />
-            <Street still={still} />
+            <Street still={still} yard={yard} />
           </g>
 
           {/* the digital twin: the buildings rise on the data */}
           {[...BUILDINGS]
             .map((b, k) => ({ b, k }))
             .sort((p, q) => p.b[0] + p.b[1] - (q.b[0] + q.b[1]))
-            .map(({ b, k }) => (
+            .concat([{ b: BUILDINGS[0], k: -1 }]) // the mast, nearer than every building
+            .map(({ b, k }) =>
+              k === -1 ? (
+                <g key="mast" style={{ transition: 'opacity 700ms' }} opacity={crane ? 1 : 0}>
+                  <Mast />
+                </g>
+              ) : (
               <g
                 key={k}
                 style={
@@ -355,7 +420,8 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
                   </>
                 )}
               </g>
-            ))}
+              ),
+            )}
 
           {/* people on the pavements in front of the buildings */}
           <g style={{ transition: 'opacity 700ms' }} opacity={twin ? 1 : 0}>
@@ -367,52 +433,47 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
             const [x, y, w, d] = BUILDINGS[4];
             return <polygon points={pts([[x, y, 0], [x + w, y, 0], [x + w, y + d, 0], [x, y + d, 0]])} fill="rgb(147 197 253 / 0.08)" stroke="#93c5fd" strokeWidth={0.9} strokeDasharray="3 2" style={{ transition: 'opacity 500ms' }} opacity={i === 1 || (i === 2 && grow < 0.15) ? 1 : 0} />;
           })()}
-          <g style={{ transition: 'opacity 600ms, transform 900ms cubic-bezier(.2,.8,.2,1)', transformBox: 'fill-box', transformOrigin: 'bottom', transform: `scaleY(${i === 2 ? 1 : 0.6})` }} opacity={crane ? 1 : 0}>
+          {/* the yard: the precast slabs still to go up, stacked on timber in front of the site */}
+          <g style={{ transition: 'opacity 600ms' }} opacity={yard && !open ? 1 : 0}>
+            <Box x={YARD.x + 0.15} y={YARD.y + 0.2} z={0} w={HERO.w - 0.3} d={0.08} h={DUNNAGE} c={['#8a7356', '#6f5b43', '#5a4a37']} />
+            <Box x={YARD.x + 0.15} y={YARD.y + HERO.d - 0.28} z={0} w={HERO.w - 0.3} d={0.08} h={DUNNAGE} c={['#8a7356', '#6f5b43', '#5a4a37']} />
+            {Array.from({ length: waiting }, (_, n) => (
+              <Box key={n} x={YARD.x} y={YARD.y} z={DUNNAGE + n * PLATE} w={HERO.w} d={HERO.d} h={PLATE} c={['#4f7fd6', C.white, C.pale]} />
+            ))}
+          </g>
+          {/* the crane's moving parts, above everything (the mast itself is drawn with the buildings) */}
+          <g style={{ transition: 'opacity 700ms' }} opacity={crane ? 1 : 0}>
             {(() => {
-              // the mast stands on the next plot, clear of the building; the jib points over the plot's centre so the
-              // hook comes straight down onto the floor being built
-              const TOP = 7.2;
-              const HW = 0.09; // half the mast's width
-              const ux = (HERO.x + HERO.w / 2 - CRANE.x) / reach;
-              const uy = (HERO.y + HERO.d / 2 - CRANE.y) / reach;
-              const along = (s: number, z: number) => iso(CRANE.x + ux * s, CRANE.y + uy * s, z);
-              const [a0x, a0y] = iso(CRANE.x - HW, CRANE.y, 0);
-              const [b0x, b0y] = iso(CRANE.x + HW, CRANE.y, 0);
-              const [a1x, a1y] = iso(CRANE.x - HW, CRANE.y, TOP);
-              const [b1x, b1y] = iso(CRANE.x + HW, CRANE.y, TOP);
-              const [jx, jy] = along(reach + 0.75, TOP); // jib tip
-              const [cx, cy] = along(-1.0, TOP); // counter-jib
-              const [px, py] = along(0, TOP + 0.9); // apex
-              const [tx, ty] = along(trolley, TOP);
+              const ux = Math.cos(angle);
+              const uy = Math.sin(angle);
+              const along = (d: number, z: number) => iso(CRANE.x + ux * d, CRANE.y + uy * d, z);
+              const [jx, jy] = along(JIB, MAST_TOP); // jib tip
+              const [cx, cy] = along(-1.0, MAST_TOP); // counter-jib
+              const [px, py] = along(0, MAST_TOP + 0.9); // apex
+              const [mx, my] = along(0, MAST_TOP); // slewing ring
+              const [tx, ty] = along(trolley, MAST_TOP);
               const [hx, hy] = along(trolley, hookZ);
-              // the slab on the hook: the same plate the building gets, hanging on four slings
-              const { x, y, w, d } = HERO;
-              const slabTop = hookZ - hang;
-              const corners = [iso(x, y, slabTop), iso(x + w, y, slabTop), iso(x + w, y + d, slabTop), iso(x, y + d, slabTop)];
-              const slung = grow < 1 && cycle < LIFT_RISE + LIFT_SET;
+              // the slab on the hook: the same plate the building gets, hanging level under the hook on four slings
+              const { w, d } = HERO;
+              const sx0 = CRANE.x + ux * trolley - w / 2;
+              const sy0 = CRANE.y + uy * trolley - d / 2;
+              const slabTop = hookZ - HANG;
+              const corners = [iso(sx0, sy0, slabTop), iso(sx0 + w, sy0, slabTop), iso(sx0 + w, sy0 + d, slabTop), iso(sx0, sy0 + d, slabTop)];
               return (
                 <g>
-                  {/* mast: two chords and their bracing */}
-                  <line x1={a0x} y1={a0y} x2={a1x} y2={a1y} stroke="#93c5fd" strokeWidth={1.4} />
-                  <line x1={b0x} y1={b0y} x2={b1x} y2={b1y} stroke="#93c5fd" strokeWidth={1.4} />
-                  {Array.from({ length: 14 }, (_, n) => {
-                    const [px0, py0] = iso(n % 2 ? CRANE.x + HW : CRANE.x - HW, CRANE.y, (n * TOP) / 14);
-                    const [px1, py1] = iso(n % 2 ? CRANE.x - HW : CRANE.x + HW, CRANE.y, ((n + 1) * TOP) / 14);
-                    return <line key={n} x1={px0} y1={py0} x2={px1} y2={py1} stroke="#93c5fd" strokeWidth={0.6} opacity={0.8} />;
-                  })}
-                  {/* jib, counter-jib with its weight, ties to the apex */}
+                  {/* jib, counter-jib with its weight, ties to the apex, the cab */}
                   <line x1={jx} y1={jy} x2={cx} y2={cy} stroke="#93c5fd" strokeWidth={2} strokeLinecap="round" />
                   <line x1={px} y1={py} x2={jx} y2={jy} stroke="#93c5fd" strokeWidth={0.6} />
                   <line x1={px} y1={py} x2={cx} y2={cy} stroke="#93c5fd" strokeWidth={0.6} />
-                  <line x1={(a1x + b1x) / 2} y1={(a1y + b1y) / 2} x2={px} y2={py} stroke="#93c5fd" strokeWidth={1.4} />
+                  <line x1={mx} y1={my} x2={px} y2={py} stroke="#93c5fd" strokeWidth={1.4} />
                   <rect x={cx - 5} y={cy - 1} width="10" height="7" rx="1" fill="#566173" />
-                  <rect x={(a1x + b1x) / 2 - 3} y={(a1y + b1y) / 2 + 1} width="7" height="6" rx="1" fill="#93c5fd" opacity={0.9} />
+                  <rect x={mx - 3.5} y={my + 1} width="7" height="6" rx="1" fill="#93c5fd" opacity={0.9} />
                   {/* trolley, cable, hook, and the slab it carries */}
                   <rect x={tx - 3} y={ty - 1.5} width="6" height="3" rx="1" fill="#e5e7eb" />
                   <line x1={tx} y1={ty} x2={hx} y2={hy} stroke="#e5e7eb" strokeWidth={0.7} />
                   <path d={`M${hx - 2},${hy} q2,4 4,0`} fill="none" stroke="#e5e7eb" strokeWidth={0.9} />
-                  {loaded && <Box x={x} y={y} z={slabTop - 0.08} w={w} d={d} h={0.08} c={['#4f7fd6', C.white, C.pale]} />}
-                  {slung && corners.map(([sx, sy], n) => <line key={n} x1={hx} y1={hy + 2} x2={sx} y2={sy} stroke="#e5e7eb" strokeWidth={0.45} opacity={0.7} />)}
+                  {loaded && <Box x={sx0} y={sy0} z={slabTop - PLATE} w={w} d={d} h={PLATE} c={['#4f7fd6', C.white, C.pale]} />}
+                  {grow < 1 && (loaded || (cycle >= LIFT_RISE && cycle < LIFT_RISE + LIFT_SET)) && corners.map(([qx, qy], n) => <line key={n} x1={hx} y1={hy + 2} x2={qx} y2={qy} stroke="#e5e7eb" strokeWidth={0.45} opacity={0.7} />)}
                 </g>
               );
             })()}

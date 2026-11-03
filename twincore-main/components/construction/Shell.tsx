@@ -29,9 +29,9 @@ function Frame({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto max-w-[1520px] px-4 pt-6 pb-16 sm:px-8 lg:px-12">
       {/* demonstration data: said plainly, on every page */}
-      <div role="note" className="mb-6 flex flex-col gap-3 rounded-2xl border border-sky-400/40 bg-sky-400/[0.06] px-4 py-3 text-sm lg:flex-row lg:items-center lg:justify-between">
+      <div role="note" className="mb-6 flex flex-col gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/[0.06] px-4 py-3 text-sm lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
-          <p className="font-medium text-sky-200">{t.demo.title}</p>
+          <p className="font-medium text-amber-700">{t.demo.title}</p>
           <p className="mt-0.5 text-xs text-fg/75">{t.demo.body}</p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
@@ -206,7 +206,7 @@ function SideNav({ current }: { current: Section }) {
       </button>
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={t.workspace}>
-          <div className="absolute inset-0 bg-ink/70 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-navy/40" onClick={() => setOpen(false)} />
           <div className="animate-fade-in absolute inset-x-0 bottom-0 flex max-h-[88svh] flex-col rounded-t-2xl border-t border-line bg-ink">
             <div className="flex items-center justify-between px-4 pt-4 pb-2">
               <p className="text-sm text-fg">

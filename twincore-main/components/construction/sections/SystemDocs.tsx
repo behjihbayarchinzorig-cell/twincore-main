@@ -443,7 +443,7 @@ export default function SystemDocs() {
                         {ROLES.map((r) => (
                           <td key={r} className={`px-2 py-1.5 text-center ${r === role ? 'bg-accent/[0.06]' : ''}`}>
                             {allowed(r, a) ? (
-                              <span className="text-emerald-300" aria-label="✓">
+                              <span className="text-emerald-700" aria-label="✓">
                                 ✓
                               </span>
                             ) : (

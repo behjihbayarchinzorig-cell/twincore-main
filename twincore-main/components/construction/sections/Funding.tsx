@@ -354,7 +354,7 @@ export default function Funding() {
                 <td className="px-2 py-2 font-mono text-xs tabular-nums">
                   {tug(dr, en)}
                   <div className="mt-1 h-1 w-20 rounded-full bg-line">
-                    <div className="h-full rounded-full bg-emerald-400" style={{ width: `${Math.min(100, used)}%` }} />
+                    <div className="h-full rounded-full bg-emerald-600" style={{ width: `${Math.min(100, used)}%` }} />
                   </div>
                 </td>
                 <td className="px-2 py-2 font-mono text-xs tabular-nums">{fl ? tug(fl, en) : '—'}</td>
@@ -404,7 +404,7 @@ export default function Funding() {
                         {s.alloc[p.id] ? tug(s.alloc[p.id], en) : '—'}
                       </td>
                     ))}
-                    <td className={`px-2 py-2 text-right font-mono text-xs tabular-nums ${gap > 0 ? 'text-red-300' : gap < 0 ? 'text-sky-300' : 'text-emerald-300'}`}>
+                    <td className={`px-2 py-2 text-right font-mono text-xs tabular-nums ${gap > 0 ? 'text-red-700' : gap < 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
                       {gap > 0 ? tug(gap, en) : gap < 0 ? `${w.over} ${tug(-gap, en)}` : w.full}
                     </td>
                   </tr>
@@ -423,14 +423,14 @@ export default function Funding() {
                 <div key={p.id} className="text-xs">
                   <div className="mb-1 flex justify-between gap-2">
                     <span className="font-mono">{p.id}</span>
-                    <span className={`font-mono tabular-nums ${gap > 0 ? 'text-red-300' : 'text-emerald-300'}`}>{gap > 0 ? `−${tug(gap, en)}` : w.full}</span>
+                    <span className={`font-mono tabular-nums ${gap > 0 ? 'text-red-700' : 'text-emerald-700'}`}>{gap > 0 ? `−${tug(gap, en)}` : w.full}</span>
                   </div>
                   {/* stacked: each committed source's share of the budget, then the uncovered rest */}
                   <div className="flex h-3 overflow-hidden rounded-full bg-line" role="img" aria-label={`${p.id}: ${w.secured} ${tug(p.budget - gap, en)} / ${w.budget} ${tug(p.budget, en)}`}>
                     {committed.map((s) =>
                       s.alloc[p.id] ? <div key={s.id} title={`${s.name}: ${tug(s.alloc[p.id], en)}`} style={{ width: `${(s.alloc[p.id] / top) * 100}%`, background: color(s.id) }} /> : null,
                     )}
-                    {gap > 0 && <div className="bg-red-400/70" style={{ width: `${(gap / top) * 100}%` }} title={`${w.gap}: ${tug(gap, en)}`} />}
+                    {gap > 0 && <div className="bg-red-500/70" style={{ width: `${(gap / top) * 100}%` }} title={`${w.gap}: ${tug(gap, en)}`} />}
                   </div>
                   {gap > 0 && promised > 0 && (
                     <p className="mt-1 text-[11px] text-mute">
@@ -449,7 +449,7 @@ export default function Funding() {
               </span>
             ))}
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-sm bg-red-400/70" />
+              <span className="h-2 w-2 rounded-sm bg-red-500/70" />
               {w.gap}
             </span>
           </div>
@@ -705,7 +705,7 @@ export default function Funding() {
                 Σ <span className="font-mono text-fg">{tug(sum(Object.values(srcForm.alloc)), en)}</span> / {tug(srcForm.amount, en)}
               </p>
             </fieldset>
-            {msg && <p className="text-xs text-red-300">{msg}</p>}
+            {msg && <p className="text-xs text-red-700">{msg}</p>}
             <Problems list={problems} />
             <div className="flex gap-2">
               <Btn kind="primary" type="submit">
@@ -758,7 +758,7 @@ export default function Funding() {
             <Field label={w.purpose}>
               <input className={inputCls} value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })} />
             </Field>
-            {msg && <p className="text-xs text-red-300">{msg}</p>}
+            {msg && <p className="text-xs text-red-700">{msg}</p>}
             <Problems list={problems} />
             <div className="flex gap-2">
               <Btn kind="primary" type="submit">

@@ -250,7 +250,7 @@ export default function Supervision() {
             {shown.map((i) => {
               const l = late(i, now);
               return (
-                <tr key={i.id} className={`cursor-pointer align-top hover:bg-surface/60 ${l ? 'bg-red-400/[0.04]' : ''}`} onClick={() => setOpen(i.id)}>
+                <tr key={i.id} className={`cursor-pointer align-top hover:bg-surface/60 ${l ? 'bg-red-500/[0.04]' : ''}`} onClick={() => setOpen(i.id)}>
                   <td className="px-2 py-2 font-mono text-xs">
                     <button type="button" className="min-h-10 cursor-pointer text-left underline-offset-2 hover:underline" onClick={() => setOpen(i.id)}>
                       {i.ref}
@@ -262,7 +262,7 @@ export default function Supervision() {
                     {i.subject}
                     <p className="line-clamp-1 text-[11px] text-mute">{i.action}</p>
                   </td>
-                  <td className={`px-2 py-2 font-mono text-xs ${l ? 'text-red-300' : 'text-mute'}`}>{i.due}</td>
+                  <td className={`px-2 py-2 font-mono text-xs ${l ? 'text-red-700' : 'text-mute'}`}>{i.due}</td>
                   <td className="px-2 py-2">
                     <span className="flex flex-wrap gap-1">
                       <Pill tone={STATE_TONE[i.state]}>{w.state[i.state]}</Pill>

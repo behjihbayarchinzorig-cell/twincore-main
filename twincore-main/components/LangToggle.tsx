@@ -48,9 +48,9 @@ export default function LangToggle() {
       aria-label={t('label')}
       title={t('label')}
       disabled={pending}
-      className="group flex shrink-0 cursor-pointer items-center gap-2 rounded-full border border-line py-1.5 pr-3 pl-2 font-mono text-xs text-fg transition-colors hover:border-mute disabled:cursor-wait"
+      className="group flex shrink-0 cursor-pointer items-center gap-2 rounded-md border border-line bg-surface py-1.5 pr-2.5 pl-2 font-mono text-xs font-medium text-fg transition-colors hover:border-mute disabled:cursor-wait"
     >
-      <span key={shown} className="animate-flip block overflow-hidden rounded-[3px] ring-1 ring-black/30">
+      <span key={shown} className="animate-flip block overflow-hidden rounded-[3px] ring-1 ring-black/10">
         <Flag lang={shown} className="block h-4 w-8" />
       </span>
       <span className="uppercase">{shown}</span>

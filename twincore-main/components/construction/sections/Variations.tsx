@@ -219,7 +219,7 @@ export default function Variations() {
                           <dt className="text-mute">{w.pending}</dt>
                           <dd className="text-right font-mono">{tug(pe, en)}</dd>
                           <dt className="text-mute">{w.share}</dt>
-                          <dd className={`text-right font-mono ${s! > LIMIT ? 'text-red-300' : 'text-fg'}`}>
+                          <dd className={`text-right font-mono ${s! > LIMIT ? 'text-red-700' : 'text-fg'}`}>
                             {pct(s, 1)} <span className="text-mute">({pct(withPending, 1)})</span>
                           </dd>
                         </dl>

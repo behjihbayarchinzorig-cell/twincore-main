@@ -24,9 +24,9 @@ export const HERO_H = HERO.floors * HERO.fh;
 type V3 = [number, number, number];
 
 // a box: top, the south face (y + d) and the east face (x + w), lit from the south-east
-export function Box({ x, y, z, w, d, h, c, op }: { x: number; y: number; z: number; w: number; d: number; h: number; c: [string, string, string]; op?: number }) {
+export function Box({ x, y, z, w, d, h, c, op, className }: { x: number; y: number; z: number; w: number; d: number; h: number; c: [string, string, string]; op?: number; className?: string }) {
   return (
-    <g opacity={op}>
+    <g opacity={op} className={className}>
       <polygon points={pts([[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]])} fill={c[1]} />
       <polygon points={pts([[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]])} fill={c[2]} />
       <polygon points={pts([[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]])} fill={c[0]} />
@@ -232,13 +232,15 @@ function Roof({ still }: { still: boolean }) {
 
 // The building: floors go up as `grow` runs 0 → 1 (the construction scene); once `open` the rooms are furnished
 // and peopled, the lift runs and the roof comes alive.
-// The build, one floor per crane lift. Within a floor (0–1): its columns rise while the hook comes down with the
-// next slab, the slab settles onto the columns still on the hook, then the hook goes back up empty.
-export const LIFT_RISE = 0.55; // columns up, the load coming down
+// The build, one floor per crane lift. Within a floor (0–1): while its columns rise, the crane picks the next precast
+// slab off the stack in the yard, hoists it and swings it over the plot; the slab is then lowered the last stretch onto
+// the columns, and the empty hook swings back to the yard (see SystemStory).
+export const LIFT_RISE = 0.6; // columns up; the slab fetched from the yard and brought over the plot
 export const LIFT_SET = 0.2; // the slab lowered the last stretch onto the columns
-const SLAB_DROP = 0.5; // how far above its place a slab is when the crane starts setting it down
+export const SLAB_DROP = 0.5; // how far above its place a slab is when the crane starts setting it down
 const ramp = (v: number) => Math.min(1, Math.max(0, v));
 const easeOut = (k: number) => 1 - (1 - k) * (1 - k);
+const easeInOut = (k: number) => k * k * (3 - 2 * k);
 // how far the slab of level `n` (1 = first floor's ceiling … floors = roof) is set down, 0–1, at build progress bf
 export const slabSet = (bf: number, n: number) => ramp((bf - (n - 1) - LIFT_RISE) / LIFT_SET);
 // its height above its final place while it is being set down
@@ -253,13 +255,13 @@ export function Hero({ grow, open, still }: { grow: number; open: boolean; still
     const z0 = f * fh;
     const set = f === 0 ? ramp(bf / 0.12) : slabSet(bf, f);
     const lift = f === 0 ? 0 : slabLift(set);
-    const h = ramp((bf - f) / LIFT_RISE) * fh;
+    const h = easeInOut(ramp((bf - f) / LIFT_RISE)) * fh;
     out.push(
       <g key={f}>
         {/* the slab, with its cut edge showing white */}
-        <Box x={x} y={y} z={z0 - 0.08 + lift} w={w} d={d} h={0.08} c={[open ? '#a9c2ec' : '#4f7fd6', C.white, C.pale]} op={f === 0 ? set : 1} />
+        <Box x={x} y={y} z={z0 - 0.08 + lift} w={w} d={d} h={0.08} c={[open ? '#a9c2ec' : '#4f7fd6', C.white, C.pale]} op={f === 0 ? set : 1} className="tc-ease" />
         {open && (
-          <g className="animate-fade-in">
+          <g className="animate-fade-in" style={{ animationDelay: `${f * 140}ms` }}>
             {/* the back walls, with windows */}
             <polygon points={pts([[x, y, z0], [x + w, y, z0], [x + w, y, z0 + fh], [x, y, z0 + fh]])} fill={C.mid} />
             <polygon points={pts([[x, y, z0], [x, y + d, z0], [x, y + d, z0 + fh], [x, y, z0 + fh]])} fill={C.deep} />
@@ -270,9 +272,10 @@ export function Hero({ grow, open, still }: { grow: number; open: boolean; still
           </g>
         )}
         {/* the corner columns standing at the cut */}
+        {/* (the three inner ones fade once the floor is fitted out, rather than vanishing) */}
         {h > 0.01 &&
-          (open ? [[x + w - 0.07, y + d - 0.07], [x + w - 0.07, y], [x, y + d - 0.07]] : [[x + w - 0.07, y + d - 0.07], [x + w - 0.07, y], [x, y + d - 0.07], [x + w / 2, y + d - 0.07], [x + w - 0.07, y + d / 2], [x + w / 2, y + d / 2]]).map(([cx, cy], k) => (
-            <Box key={`c${k}`} x={cx} y={cy} z={z0} w={0.07} d={0.07} h={h} c={[C.white, C.pale, C.soft]} />
+          [[x + w - 0.07, y + d - 0.07], [x + w - 0.07, y], [x, y + d - 0.07], [x + w / 2, y + d - 0.07], [x + w - 0.07, y + d / 2], [x + w / 2, y + d / 2]].map(([cx, cy], k) => (
+            <Box key={`c${k}`} x={cx} y={cy} z={z0} w={0.07} d={0.07} h={h} c={[C.white, C.pale, C.soft]} op={open && k > 2 ? 0 : 1} className="tc-ease" />
           ))}
       </g>,
     );
@@ -281,11 +284,11 @@ export function Hero({ grow, open, still }: { grow: number; open: boolean; still
   if (roof > 0) {
     out.push(
       <g key="roof" transform={`translate(0,${-slabLift(roof) * S})`}>
-        <Box x={x} y={y} z={HERO_H - 0.1} w={w} d={d} h={0.1} c={[C.blue, C.white, C.pale]} />
+        <Box x={x} y={y} z={HERO_H - 0.1} w={w} d={d} h={0.1} c={[C.blue, C.white, C.pale]} className="tc-ease" />
         {/* parapet rail */}
         <polyline points={pts([[x, y + d, HERO_H + 0.12], [x + w, y + d, HERO_H + 0.12], [x + w, y, HERO_H + 0.12]])} fill="none" stroke={C.soft} strokeWidth={0.6} />
         {open && (
-          <g className="animate-fade-in">
+          <g className="animate-fade-in" style={{ animationDelay: `${floors * 140}ms` }}>
             <Roof still={still} />
           </g>
         )}
@@ -339,7 +342,9 @@ const PAINT: [string, string, string][] = [
   [C.pale, C.soft, C.hi],
 ];
 
-export function Street({ still }: { still: boolean }) {
+// `yard`: while the building goes up the plaza in front is the site's staging yard, so its kiosk, trees and people step
+// aside (the slab stack is drawn by SystemStory).
+export function Street({ still, yard = false }: { still: boolean; yard?: boolean }) {
   return (
     <g>
       {CARS.map((car, k) => {
@@ -364,7 +369,7 @@ export function Street({ still }: { still: boolean }) {
         );
       })}
       {/* street trees */}
-      {[[1.9, 0.5], [1.9, 1.5], [2.25, 1.9], [3.6, 1.9], [0.3, 1.9], [5.85, 2.3], [5.85, 3.8], [0.2, 4.25]].map(([tx, ty], k) => (
+      {[[1.9, 0.5], [1.9, 1.5], [2.25, 1.9], [3.6, 1.9], [0.3, 1.9], [5.85, 3.0], [5.85, 3.8], [0.2, 4.25]].map(([tx, ty], k) => (
         <Tree key={k} p={[tx, ty, 0]} s={0.55} />
       ))}
       {/* the grove on the plot behind the site */}
@@ -373,12 +378,14 @@ export function Street({ still }: { still: boolean }) {
       ))}
       {/* the plaza in front, on the left: trees, a kiosk, people */}
       <polygon points={pts([[2.3, 4.3, 0], [3.8, 4.3, 0], [3.8, 5.8, 0], [2.3, 5.8, 0]])} fill={C.night} stroke={C.mid} strokeWidth={0.6} />
-      <Box x={2.95} y={4.95} z={0} w={0.35} d={0.25} h={0.3} c={[C.soft, C.hi, C.blue]} />
-      <Person p={[3.15, 5.35, 0]} body={C.white} still={still} />
-      <Person p={[2.6, 5.35, 0]} body={C.hi} walk={{ to: [3.5, 4.9, 0], dur: 9, begin: -2 }} still={still} />
-      {[[3.1, 4.5, 0.7], [3.55, 4.6, 0.6], [2.6, 5.5, 0.65], [3.6, 5.5, 0.75]].map(([tx, ty, ts], k) => (
-        <Tree key={`p${k}`} p={[tx, ty, 0]} s={ts} />
-      ))}
+      <g style={{ transition: 'opacity 600ms' }} opacity={yard ? 0 : 1}>
+        <Box x={2.95} y={4.95} z={0} w={0.35} d={0.25} h={0.3} c={[C.soft, C.hi, C.blue]} />
+        <Person p={[3.15, 5.35, 0]} body={C.white} still={still} />
+        <Person p={[2.6, 5.35, 0]} body={C.hi} walk={{ to: [3.5, 4.9, 0], dur: 9, begin: -2 }} still={still} />
+        {[[3.1, 4.5, 0.7], [3.55, 4.6, 0.6], [2.6, 5.5, 0.65], [3.6, 5.5, 0.75]].map(([tx, ty, ts], k) => (
+          <Tree key={`p${k}`} p={[tx, ty, 0]} s={ts} />
+        ))}
+      </g>
     </g>
   );
 }

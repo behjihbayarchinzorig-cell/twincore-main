@@ -317,8 +317,8 @@ export default function LayerMap() {
           {/* the readout over the map */}
           <div className="pointer-events-none absolute top-3 left-14 z-[500] flex items-center gap-2 rounded-full border border-white/10 bg-ink/60 px-3 py-1.5 font-mono text-[11px] text-fg/85 backdrop-blur-md">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-600 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
             </span>
             <span className="tabular-nums">
               {count}/{LAYERS.length} · Z{zoom.toFixed(1)}

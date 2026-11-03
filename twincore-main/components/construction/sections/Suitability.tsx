@@ -258,7 +258,7 @@ export default function Suitability() {
                     <span className="flex items-center justify-between gap-2 text-xs">
                       <span className="truncate text-fg/90">{L(c.name)}</span>
                       <span className="shrink-0 font-mono text-[11px] text-mute">
-                        <span className="text-emerald-300">{n('pass')}</span> · <span className="text-sky-300">{n('warn')}</span> · <span className="text-red-300">{n('fail')}</span>
+                        <span className="text-emerald-700">{n('pass')}</span> · <span className="text-amber-700">{n('warn')}</span> · <span className="text-red-700">{n('fail')}</span>
                       </span>
                     </span>
                     <span className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
@@ -296,7 +296,7 @@ export default function Suitability() {
                 {r.plot.pkg && <span className="block text-mute">{r.plot.pkg}</span>}
               </td>
               <td className="px-2 py-2 text-xs">{L(r.c.name)}</td>
-              <td className={`px-2 py-2 font-mono text-xs ${r.verdict === 'fail' ? 'text-red-300' : r.verdict === 'warn' ? 'text-sky-300' : ''}`}>{r.verdict === 'na' ? w.na : fmt(r.value, U(r.c.unit))}</td>
+              <td className={`px-2 py-2 font-mono text-xs ${r.verdict === 'fail' ? 'text-red-700' : r.verdict === 'warn' ? 'text-amber-700' : ''}`}>{r.verdict === 'na' ? w.na : fmt(r.value, U(r.c.unit))}</td>
               <td className="px-2 py-2 font-mono text-xs text-mute">
                 {r.c.kind === 'max' ? '≤' : '≥'} {fmt(r.limit, U(r.c.unit))}
               </td>
@@ -369,7 +369,7 @@ function PlotView({ plot: p, rs, score, w, L, zone, onCrit }: { plot: Plot; rs: 
   return (
     <div className="space-y-5 text-sm">
       <div className="flex items-center gap-3">
-        <span className={`font-mono text-3xl ${score == null ? 'text-mute' : score >= 85 ? 'text-emerald-300' : score >= 60 ? 'text-sky-300' : 'text-red-300'}`}>{score ?? '—'}</span>
+        <span className={`font-mono text-3xl ${score == null ? 'text-mute' : score >= 85 ? 'text-emerald-700' : score >= 60 ? 'text-amber-700' : 'text-red-700'}`}>{score ?? '—'}</span>
         <span className="text-xs text-mute">
           {w.score} · {w.outOf}
         </span>
