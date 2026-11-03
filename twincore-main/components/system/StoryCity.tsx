@@ -232,20 +232,32 @@ function Roof({ still }: { still: boolean }) {
 
 // The building: floors go up as `grow` runs 0 → 1 (the construction scene); once `open` the rooms are furnished
 // and peopled, the lift runs and the roof comes alive.
+// The build, one floor per crane lift. Within a floor (0–1): its columns rise while the hook comes down with the
+// next slab, the slab settles onto the columns still on the hook, then the hook goes back up empty.
+export const LIFT_RISE = 0.55; // columns up, the load coming down
+export const LIFT_SET = 0.2; // the slab lowered the last stretch onto the columns
+const SLAB_DROP = 0.5; // how far above its place a slab is when the crane starts setting it down
+const ramp = (v: number) => Math.min(1, Math.max(0, v));
+const easeOut = (k: number) => 1 - (1 - k) * (1 - k);
+// how far the slab of level `n` (1 = first floor's ceiling … floors = roof) is set down, 0–1, at build progress bf
+export const slabSet = (bf: number, n: number) => ramp((bf - (n - 1) - LIFT_RISE) / LIFT_SET);
+// its height above its final place while it is being set down
+export const slabLift = (p: number) => (1 - easeOut(p)) * SLAB_DROP;
+
 export function Hero({ grow, open, still }: { grow: number; open: boolean; still: boolean }) {
   const { x, y, w, d, floors, fh } = HERO;
   const bf = grow * floors;
   const out: ReactNode[] = [];
-  // each floor: its slab fades in over the last stretch of the floor below, then its columns rise through it
-  const ramp = (v: number) => Math.min(1, Math.max(0, v));
-  for (let f = 0; f < floors && bf > f - 0.3; f++) {
+  // the ground slab is poured first; every slab above arrives on the crane hook and is lowered onto the columns
+  for (let f = 0; f < floors && (f === 0 ? bf > 0 : slabSet(bf, f) > 0); f++) {
     const z0 = f * fh;
-    const slab = f === 0 ? ramp(bf / 0.15) : ramp((bf - f + 0.3) / 0.3);
-    const h = ramp((bf - f) / 0.7) * fh;
+    const set = f === 0 ? ramp(bf / 0.12) : slabSet(bf, f);
+    const lift = f === 0 ? 0 : slabLift(set);
+    const h = ramp((bf - f) / LIFT_RISE) * fh;
     out.push(
       <g key={f}>
         {/* the slab, with its cut edge showing white */}
-        <Box x={x} y={y} z={z0 - 0.08} w={w} d={d} h={0.08} c={[open ? '#a9c2ec' : '#4f7fd6', C.white, C.pale]} op={slab} />
+        <Box x={x} y={y} z={z0 - 0.08 + lift} w={w} d={d} h={0.08} c={[open ? '#a9c2ec' : '#4f7fd6', C.white, C.pale]} op={f === 0 ? set : 1} />
         {open && (
           <g className="animate-fade-in">
             {/* the back walls, with windows */}
@@ -265,9 +277,10 @@ export function Hero({ grow, open, still }: { grow: number; open: boolean; still
       </g>,
     );
   }
-  if (bf > floors - 0.3) {
+  const roof = slabSet(bf, floors);
+  if (roof > 0) {
     out.push(
-      <g key="roof" opacity={ramp((bf - floors + 0.3) / 0.3)}>
+      <g key="roof" transform={`translate(0,${-slabLift(roof) * S})`}>
         <Box x={x} y={y} z={HERO_H - 0.1} w={w} d={d} h={0.1} c={[C.blue, C.white, C.pale]} />
         {/* parapet rail */}
         <polyline points={pts([[x, y + d, HERO_H + 0.12], [x + w, y + d, HERO_H + 0.12], [x + w, y, HERO_H + 0.12]])} fill="none" stroke={C.soft} strokeWidth={0.6} />
@@ -362,8 +375,8 @@ export function Street({ still }: { still: boolean }) {
       <polygon points={pts([[2.3, 4.3, 0], [3.8, 4.3, 0], [3.8, 5.8, 0], [2.3, 5.8, 0]])} fill={C.night} stroke={C.mid} strokeWidth={0.6} />
       <Box x={2.95} y={4.95} z={0} w={0.35} d={0.25} h={0.3} c={[C.soft, C.hi, C.blue]} />
       <Person p={[3.15, 5.35, 0]} body={C.white} still={still} />
-      <Person p={[2.5, 5.0, 0]} body={C.hi} walk={{ to: [3.5, 4.55, 0], dur: 9, begin: -2 }} still={still} />
-      {[[2.55, 4.55, 0.7], [3.55, 4.6, 0.6], [2.6, 5.5, 0.65], [3.6, 5.5, 0.75]].map(([tx, ty, ts], k) => (
+      <Person p={[2.6, 5.35, 0]} body={C.hi} walk={{ to: [3.5, 4.9, 0], dur: 9, begin: -2 }} still={still} />
+      {[[3.1, 4.5, 0.7], [3.55, 4.6, 0.6], [2.6, 5.5, 0.65], [3.6, 5.5, 0.75]].map(([tx, ty, ts], k) => (
         <Tree key={`p${k}`} p={[tx, ty, 0]} s={ts} />
       ))}
     </g>

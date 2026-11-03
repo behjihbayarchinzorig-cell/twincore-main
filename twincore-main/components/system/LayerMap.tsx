@@ -5,7 +5,9 @@ import type * as Leaflet from 'leaflet';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import BasemapSwitch from '@/components/BasemapSwitch';
 import { Link } from '@/i18n/navigation';
+import { BASEMAPS, basemapUrl, type Basemap } from '@/lib/basemaps';
 import { CENTRE, ll, rect } from '@/lib/construction/geo';
 import { PACKAGES, STATUS_FILL, type Pkg } from '@/lib/packages';
 import { usePersistentState } from '@/lib/persist';
@@ -72,6 +74,9 @@ export default function LayerMap() {
     works: true,
     bim: true,
   });
+  const [base, setBase] = usePersistentState<Basemap>('map.basemap', 'imagery');
+  const baseLayer = useRef<Leaflet.TileLayer | null>(null);
+  const [mapReady, setMapReady] = useState(false); // Leaflet loads after the first render
   const [sel, setSel] = useState<Sel>(null);
   const [cursor, setCursor] = useState<[number, number] | null>(null);
   const [zoom, setZoom] = useState(16);
@@ -107,7 +112,6 @@ export default function LayerMap() {
         L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/${path}/MapServer/tile/{z}/{y}/{x}`, { maxZoom: 19, pane, ...opts });
       const tip = (pane: Layer, permanent = false, direction: Leaflet.Direction = 'center') => ({ pane, permanent, direction, className: 'tc-tip' });
 
-      esri('World_Imagery', 'ortho', { attribution: 'Imagery © Esri, Maxar, Earthstar Geographics' }).addTo(m);
       esri('Elevation/World_Hillshade', 'dem', { opacity: 0.55, attribution: 'Hillshade © Esri' }).addTo(m);
       esri('Reference/World_Transportation', 'roads', { opacity: 0.9 }).addTo(m);
       esri('Reference/World_Boundaries_and_Places', 'roads', { opacity: 0.9 }).addTo(m);
@@ -148,6 +152,7 @@ export default function LayerMap() {
         })
         .addTo(m);
       map.current = m;
+      setMapReady(true);
 
       // the first time it comes into view: fly in, and the layers arrive one by one
       const arrive = () => {
@@ -172,6 +177,22 @@ export default function LayerMap() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // The basemap sits in the ortho pane, so the ortho switch still fades it; picking another swaps the tiles.
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+    const b = BASEMAPS.find((x) => x.id === base) ?? BASEMAPS[0];
+    let gone = false;
+    import('leaflet').then((L) => {
+      if (gone) return;
+      baseLayer.current?.remove();
+      baseLayer.current = L.tileLayer(basemapUrl(b.path), { pane: 'ortho', maxZoom: 19, maxNativeZoom: b.native, attribution: b.attribution }).addTo(m);
+    });
+    return () => {
+      gone = true;
+    };
+  }, [base, mapReady]);
 
   // Show / hide: each layer's pane fades (staggered on arrival, at once after that).
   const arrived = useRef(false);
@@ -291,6 +312,7 @@ export default function LayerMap() {
 
       <div className="order-1 lg:order-2">
         <div className="relative isolate rounded-2xl bg-gradient-to-br from-accent/40 via-line/40 to-transparent p-px shadow-[0_30px_80px_-30px_rgba(37,99,235,0.45)]">
+          <BasemapSwitch value={base} onChange={setBase} at="top-12 left-14 sm:top-3 sm:left-auto sm:right-3" />
           <div ref={box} className="tc-map shimmer isolate h-[380px] w-full overflow-hidden rounded-[15px] sm:h-[460px] lg:h-[580px]" aria-label={t('mapLabel')} />
           {/* the readout over the map */}
           <div className="pointer-events-none absolute top-3 left-14 z-[500] flex items-center gap-2 rounded-full border border-white/10 bg-ink/60 px-3 py-1.5 font-mono text-[11px] text-fg/85 backdrop-blur-md">

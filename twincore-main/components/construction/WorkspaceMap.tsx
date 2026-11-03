@@ -3,9 +3,12 @@
 import 'leaflet/dist/leaflet.css';
 import type * as Leaflet from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
+import BasemapSwitch from '@/components/BasemapSwitch';
+import { BASEMAPS, basemapUrl, type Basemap } from '@/lib/basemaps';
 import { CENTRE, ll, rect } from '@/lib/construction/geo';
 import { useText, useWords } from '@/lib/construction/text';
 import type { Data } from '@/lib/construction/types';
+import { usePersistentState } from '@/lib/persist';
 
 // The workspace map: the same engine and imagery as the base-data map, with the construction records on it. Each
 // kind of record is its own layer (switchable, with a legend); clicking a feature hands its kind and id back, so the
@@ -39,6 +42,8 @@ export default function WorkspaceMap({ data, layers, initial, only, selected, on
   const group = useRef<Partial<Record<MapLayer, Leaflet.LayerGroup>>>({});
   const [on, setOn] = useState<MapLayer[]>(initial ?? layers);
   const [loaded, setLoaded] = useState(false);
+  const [base, setBase] = usePersistentState<Basemap>('map.basemap', 'imagery');
+  const baseLayer = useRef<Leaflet.TileLayer | null>(null);
   const pick = useRef(onPick);
   pick.current = onPick;
 
@@ -50,7 +55,6 @@ export default function WorkspaceMap({ data, layers, initial, only, selected, on
       L.current = lib;
       const m = lib.map(box.current, { center: CENTRE, zoom: 16, minZoom: 13, maxZoom: 19, scrollWheelZoom: false, attributionControl: true });
       m.attributionControl.setPrefix(false);
-      lib.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: 'Imagery © Esri, Maxar, Earthstar Geographics', opacity: 0.85 }).addTo(m);
       lib.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(m);
       map.current = m;
       setLoaded(true);
@@ -61,6 +65,16 @@ export default function WorkspaceMap({ data, layers, initial, only, selected, on
       map.current = null;
     };
   }, []);
+
+  // the Esri basemap, swapped in place when another is picked
+  useEffect(() => {
+    const m = map.current;
+    const lib = L.current;
+    if (!m || !lib) return;
+    const b = BASEMAPS.find((x) => x.id === base) ?? BASEMAPS[0];
+    baseLayer.current?.remove();
+    baseLayer.current = lib.tileLayer(basemapUrl(b.path), { maxZoom: 19, maxNativeZoom: b.native, attribution: b.attribution, opacity: 0.85 }).addTo(m);
+  }, [base, loaded]);
 
   // (re)draw the records whenever they, the filter or the selection change
   useEffect(() => {
@@ -163,6 +177,7 @@ export default function WorkspaceMap({ data, layers, initial, only, selected, on
         })}
       </div>
       <div className="relative isolate">
+        <BasemapSwitch value={base} onChange={setBase} />
         <div ref={box} className={`tc-map shimmer ${height} w-full overflow-hidden rounded-xl border border-line`} aria-label={t.common.onMap} />
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-mute">

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/navigation';
-import { Clouds, HERO, HERO_H, Hero, Park, Parked, Street, Walkers, iso, pts } from './StoryCity';
+import { Box, C, Clouds, HERO, HERO_H, Hero, LIFT_RISE, LIFT_SET, Park, Parked, Street, Walkers, iso, pts, slabLift, slabSet } from './StoryCity';
 
 // The overview as a short animated story, told in the platform's own words: base data is laid down, the digital twin
 // rises on it, construction is controlled on the twin, the site is monitored — and every object is one record with
@@ -26,6 +26,10 @@ const BUILDINGS: [number, number, number, number, number][] = [
   [4.4, 2.45, 1.2, 1.3, 0.35], // parking deck
 ];
 const LIFTS = HERO.floors; // crane lifts in scene 3, one per floor
+// the tower crane's mast: the site's plot is all building, so the crane stands on the corner of the plaza in front
+// of it. In this view that is just left of the building, with only the low school behind it — never inside the
+// building or against a tall neighbour; only the jib reaches over, high above the roof line.
+const CRANE = { x: HERO.x + 0.17, y: HERO.y + HERO.d + 0.57 };
 const SENSORS: [number, number, number, boolean][] = [
   [0.35, 4.45, 3.0, false],
   [2.45, 0.35, 5.0, false],
@@ -166,16 +170,33 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
   const sensors = i >= 3;
   const ids = i === 4;
   // the building goes up at a steady pace (no slow crawl at the end): a short pause for the crane to swing in,
-  // the climb, a moment finished. The hook makes one full lift per floor, so it is back at the top when the building is.
-  const grow = i < 2 ? 0 : i > 2 ? 1 : Math.min(1, Math.max(0, (t - 0.08) / 0.8));
+  // the climb, a moment finished. The hook makes one lift per floor, in step with the building (see StoryCity's
+  // LIFT_RISE / LIFT_SET): it comes down with the next slab while the columns rise, lowers the slab onto them, and
+  // goes back up empty.
+  const grow = i < 2 ? 0 : i > 2 ? 1 : Math.min(1, Math.max(0, (t - 0.08) / 0.78));
   const floors = HERO.floors;
-  const cycle = (grow * LIFTS) % 1; // each lift: the load is lowered, set down, the hook goes back up
+  const bf = grow * LIFTS;
+  const lift = Math.min(LIFTS - 1, Math.floor(bf));
+  const cycle = bf - lift;
   const ease = (k: number) => k * k * (3 - 2 * k);
-  const top = grow * HERO_H + 0.35;
-  const hookZ = grow >= 1 ? 6.4 : cycle < 0.55 ? 6.4 - (6.4 - top) * ease(cycle / 0.55) : top + (6.4 - top) * ease((cycle - 0.55) / 0.45);
-  const loaded = grow < 1 && cycle < 0.55;
-  const trolleyX = HERO.x + HERO.w / 2 + 0.25 * Math.sin(grow * LIFTS * Math.PI);
-  const open = grow >= 1; // the building is finished: its rooms fill and the roof comes alive
+  const HOOK_UP = 6.4;
+  const hang = 0.3; // the hook rides this far above the slab it carries
+  const land = (lift + 1) * HERO.fh + hang; // the hook once the slab is in place
+  const setP = slabSet(bf, lift + 1);
+  const hookZ =
+    grow >= 1
+      ? HOOK_UP
+      : cycle < LIFT_RISE
+        ? HOOK_UP - (HOOK_UP - land - slabLift(0)) * ease(cycle / LIFT_RISE)
+        : cycle < LIFT_RISE + LIFT_SET
+          ? land + slabLift(setP)
+          : land + (HOOK_UP - land) * ease((cycle - LIFT_RISE - LIFT_SET) / (1 - LIFT_RISE - LIFT_SET));
+  // the slab hangs from the hook until it is set down (Hero draws it from then on)
+  const loaded = grow < 1 && cycle < LIFT_RISE;
+  const reach = Math.hypot(HERO.x + HERO.w / 2 - CRANE.x, HERO.y + HERO.d / 2 - CRANE.y); // mast to the plot's centre
+  const trolley = reach; // the hook hangs straight over the plot's centre, so the slab comes down square
+  const open = grow >= 1; // the building is finished: its rooms fill, the roof comes alive and the crane leaves
+  const crane = i === 2 && !open;
 
   return (
     <div ref={box} className={compact ? 'flex flex-col gap-4' : 'grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14'}>
@@ -346,47 +367,59 @@ export default function SystemStory({ scenes, more, compact = false }: { scenes:
             const [x, y, w, d] = BUILDINGS[4];
             return <polygon points={pts([[x, y, 0], [x + w, y, 0], [x + w, y + d, 0], [x, y + d, 0]])} fill="rgb(147 197 253 / 0.08)" stroke="#93c5fd" strokeWidth={0.9} strokeDasharray="3 2" style={{ transition: 'opacity 500ms' }} opacity={i === 1 || (i === 2 && grow < 0.15) ? 1 : 0} />;
           })()}
-          <g style={{ transition: 'opacity 500ms, transform 900ms cubic-bezier(.2,.8,.2,1)', transformBox: 'fill-box', transformOrigin: 'bottom', transform: `scaleY(${i === 2 ? 1 : 0.6})` }} opacity={i === 2 ? 1 : 0}>
+          <g style={{ transition: 'opacity 600ms, transform 900ms cubic-bezier(.2,.8,.2,1)', transformBox: 'fill-box', transformOrigin: 'bottom', transform: `scaleY(${i === 2 ? 1 : 0.6})` }} opacity={crane ? 1 : 0}>
             {(() => {
-              const MX = HERO.x + HERO.w + 0.08, MY = HERO.y + HERO.d / 2, TOP = 7.2;
-              const P = (x: number, z: number) => iso(x, MY, z);
-              const [a0x, a0y] = P(MX - 0.12, 0);
-              const [b0x, b0y] = P(MX + 0.12, 0);
-              const [a1x, a1y] = P(MX - 0.12, TOP);
-              const [b1x, b1y] = P(MX + 0.12, TOP);
-              const [jx, jy] = P(1.5, TOP); // jib tip
-              const [cx, cy] = P(4.7, TOP); // counter-jib
-              const [px, py] = P(MX, TOP + 0.9); // apex
-              const [tx, ty] = P(trolleyX, TOP);
-              const [hx, hy] = iso(trolleyX, MY, hookZ);
+              // the mast stands on the next plot, clear of the building; the jib points over the plot's centre so the
+              // hook comes straight down onto the floor being built
+              const TOP = 7.2;
+              const HW = 0.09; // half the mast's width
+              const ux = (HERO.x + HERO.w / 2 - CRANE.x) / reach;
+              const uy = (HERO.y + HERO.d / 2 - CRANE.y) / reach;
+              const along = (s: number, z: number) => iso(CRANE.x + ux * s, CRANE.y + uy * s, z);
+              const [a0x, a0y] = iso(CRANE.x - HW, CRANE.y, 0);
+              const [b0x, b0y] = iso(CRANE.x + HW, CRANE.y, 0);
+              const [a1x, a1y] = iso(CRANE.x - HW, CRANE.y, TOP);
+              const [b1x, b1y] = iso(CRANE.x + HW, CRANE.y, TOP);
+              const [jx, jy] = along(reach + 0.75, TOP); // jib tip
+              const [cx, cy] = along(-1.0, TOP); // counter-jib
+              const [px, py] = along(0, TOP + 0.9); // apex
+              const [tx, ty] = along(trolley, TOP);
+              const [hx, hy] = along(trolley, hookZ);
+              // the slab on the hook: the same plate the building gets, hanging on four slings
+              const { x, y, w, d } = HERO;
+              const slabTop = hookZ - hang;
+              const corners = [iso(x, y, slabTop), iso(x + w, y, slabTop), iso(x + w, y + d, slabTop), iso(x, y + d, slabTop)];
+              const slung = grow < 1 && cycle < LIFT_RISE + LIFT_SET;
               return (
                 <g>
                   {/* mast: two chords and their bracing */}
                   <line x1={a0x} y1={a0y} x2={a1x} y2={a1y} stroke="#93c5fd" strokeWidth={1.4} />
                   <line x1={b0x} y1={b0y} x2={b1x} y2={b1y} stroke="#93c5fd" strokeWidth={1.4} />
                   {Array.from({ length: 14 }, (_, n) => {
-                    const [ux, uy] = P(n % 2 ? MX + 0.12 : MX - 0.12, (n * TOP) / 14);
-                    const [vx, vy] = P(n % 2 ? MX - 0.12 : MX + 0.12, ((n + 1) * TOP) / 14);
-                    return <line key={n} x1={ux} y1={uy} x2={vx} y2={vy} stroke="#93c5fd" strokeWidth={0.6} opacity={0.8} />;
+                    const [px0, py0] = iso(n % 2 ? CRANE.x + HW : CRANE.x - HW, CRANE.y, (n * TOP) / 14);
+                    const [px1, py1] = iso(n % 2 ? CRANE.x - HW : CRANE.x + HW, CRANE.y, ((n + 1) * TOP) / 14);
+                    return <line key={n} x1={px0} y1={py0} x2={px1} y2={py1} stroke="#93c5fd" strokeWidth={0.6} opacity={0.8} />;
                   })}
                   {/* jib, counter-jib with its weight, ties to the apex */}
                   <line x1={jx} y1={jy} x2={cx} y2={cy} stroke="#93c5fd" strokeWidth={2} strokeLinecap="round" />
                   <line x1={px} y1={py} x2={jx} y2={jy} stroke="#93c5fd" strokeWidth={0.6} />
                   <line x1={px} y1={py} x2={cx} y2={cy} stroke="#93c5fd" strokeWidth={0.6} />
                   <line x1={(a1x + b1x) / 2} y1={(a1y + b1y) / 2} x2={px} y2={py} stroke="#93c5fd" strokeWidth={1.4} />
-                  <rect x={cx - 9} y={cy - 1} width="10" height="7" rx="1" fill="#566173" />
+                  <rect x={cx - 5} y={cy - 1} width="10" height="7" rx="1" fill="#566173" />
                   <rect x={(a1x + b1x) / 2 - 3} y={(a1y + b1y) / 2 + 1} width="7" height="6" rx="1" fill="#93c5fd" opacity={0.9} />
-                  {/* trolley, cable, hook and the load it carries */}
+                  {/* trolley, cable, hook, and the slab it carries */}
                   <rect x={tx - 3} y={ty - 1.5} width="6" height="3" rx="1" fill="#e5e7eb" />
                   <line x1={tx} y1={ty} x2={hx} y2={hy} stroke="#e5e7eb" strokeWidth={0.7} />
                   <path d={`M${hx - 2},${hy} q2,4 4,0`} fill="none" stroke="#e5e7eb" strokeWidth={0.9} />
-                  {loaded && <rect x={hx - 8} y={hy + 2.5} width="16" height="5" rx="1" fill="#9cc3ff" stroke="#3b6fd8" strokeWidth={0.6} />}
+                  {loaded && <Box x={x} y={y} z={slabTop - 0.08} w={w} d={d} h={0.08} c={['#4f7fd6', C.white, C.pale]} />}
+                  {slung && corners.map(([sx, sy], n) => <line key={n} x1={hx} y1={hy + 2} x2={sx} y2={sy} stroke="#e5e7eb" strokeWidth={0.45} opacity={0.7} />)}
                 </g>
               );
             })()}
           </g>
           <g style={{ transition: 'opacity 500ms' }} opacity={i === 2 ? 1 : 0}>
-            <g transform={small ? 'translate(-55,-112)' : 'translate(70,-130)'}>
+            {/* in the corner the crane's jib doesn't reach: top-left on a wide picture, top-right on the narrow phone one */}
+            <g transform={small ? 'translate(30,-146)' : 'translate(-182,-140)'}>
               <rect width="110" height="34" rx="8" fill="#0b1426" stroke="#1e3a6b" />
               <rect x="10" y="20" width="90" height="5" rx="2.5" fill="#1e293b" />
               <rect x="10" y="20" width={90 * grow} height="5" rx="2.5" fill="#3b82f6" />

@@ -4,7 +4,7 @@ import { useLocale } from 'next-intl';
 import { useState } from 'react';
 import { BENEFITS, type BenefitIcon } from '@/lib/benefits';
 
-// "TwinCore-ийн үр өгөөж": six cards, all alike — an icon, the benefit, and in a block of
+// "TwinCore юу өгөх вэ?": six cards, all alike — an icon, the benefit, and in a block of
 // its own the figures: before and with TwinCore, the stated improvement, a two-bar comparison, and on request how the
 // stated figure follows from the numbers. The figures are the presentation's, shown as supplied and marked as not
 // independently verified.
@@ -63,11 +63,11 @@ export default function BenefitMetrics() {
         how: 'How it’s worked out',
       }
     : {
-        title: 'TwinCore-ийн үр өгөөж',
-        before: 'Өмнө',
-        after: 'TwinCore-той',
+        title: 'TwinCore юу өгөх вэ?',
+        before: 'Өмнө нь',
+        after: 'TwinCore-оор',
         unit: 'Нэгж',
-        how: 'Хэрхэн тооцсон',
+        how: 'Яаж тооцсон бэ',
       };
 
   return (
